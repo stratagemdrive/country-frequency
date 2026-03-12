@@ -65,7 +65,8 @@ from dateutil import parser as dtparser
 
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
-BASELINE_MIN_RUNS = 7      # history points needed before full rolling baseline kicks in
+BASELINE_MIN_RUNS = 30     # history points needed before full rolling baseline kicks in
+                              # (~15 days of twice-daily runs)
 BASELINE_DAYS     = 30     # how far back the baseline window looks
 BASELINE_RECENCY_EXCLUDE_DAYS = 3   # exclude the most recent N days from baseline
                                     # so an ongoing event doesn't erase its own signal
@@ -133,51 +134,61 @@ SOURCE_HOME_COUNTRY: Dict[str, str] = {
 # Counts are expected weighted mentions per 24h window across ~500 articles.
 # Values are higher than the pre-city baseline to account for major-city
 # coverage that now rolls up to the country count.
+# Seed baselines = expected mention counts on a QUIET news day.
+# Calibrated against observed real RSS data (city-expanded aliases, ~500 articles/day).
+# These stay active for the first 30 runs (~15 days); after that the
+# rolling 30-day window takes over entirely.
+#
+# Key calibration anchors from observed data (today is an Iran/Israel spike day):
+#   Russia ~26, Ukraine ~17, China ~19, UK ~12-26, France ~7-9,
+#   Canada ~4-7, India ~8, Syria ~17 (currently elevated), Israel ~40-47 (spike)
+# Quiet-day estimates set ~20-30% below current observed where war/conflict
+# is clearly inflating counts right now.
 SEED_BASELINE: Dict[str, float] = {
-    "Russia":         40.0,   # Moscow + SPb + others frequently cited
-    "China":          45.0,   # Beijing + Shanghai + many major cities
-    "Ukraine":        35.0,   # Kyiv + Kharkiv + Odesa + front-line cities
-    "Israel":         28.0,   # Jerusalem + Tel Aviv + Haifa
-    "Palestine":      14.0,   # Gaza + West Bank cities
-    "Iran":           18.0,   # Tehran + Mashhad + Isfahan
-    "United Kingdom": 28.0,   # London + Birmingham + Manchester etc.
-    "Germany":        16.0,   # Berlin + Hamburg + Munich + others
-    "France":         16.0,   # Paris + Marseille + Lyon etc.
-    "India":          22.0,   # New Delhi + Mumbai + Bangalore + many others
-    "Pakistan":       10.0,   # Islamabad + Karachi + Lahore
-    "North Korea":     6.0,   # Pyongyang only, rarely named by city
-    "South Korea":    10.0,   # Seoul + Busan + others
-    "Japan":          14.0,   # Tokyo + Osaka + others
-    "Taiwan":         10.0,   # Taipei + Kaohsiung + Taichung
-    "Syria":          10.0,   # Damascus + Aleppo + Homs etc.
-    "Turkey":         12.0,   # Ankara + Istanbul + others
-    "Saudi Arabia":   12.0,   # Riyadh + Jeddah + Mecca
-    "UAE":             8.0,   # Abu Dhabi + Dubai + Sharjah
-    "Yemen":           8.0,   # Sanaa + Aden + Hodeidah
-    "Canada":         14.0,   # Ottawa + Toronto + Montreal + Vancouver
-    "Mexico":         12.0,   # Mexico City + Guadalajara + Monterrey etc.
-    "Brazil":         14.0,   # Brasilia + Sao Paulo + Rio + others
-    "Colombia":       10.0,   # Bogota + Medellin + Cali + others
-    "Venezuela":       8.0,   # Caracas + Maracaibo + Valencia
-    "Cuba":            6.0,   # Havana + Santiago
-    "Argentina":      10.0,   # Buenos Aires + Cordoba + Rosario
-    "Chile":           8.0,   # Santiago + Valparaiso + Concepcion
-    "Peru":            7.0,   # Lima + Arequipa + others
-    "Panama":          6.0,   # Panama City + Canal
-    "El Salvador":     5.0,   # San Salvador; small country
-    "Nigeria":        10.0,   # Abuja + Lagos + Kano + others
-    "Sudan":           8.0,   # Khartoum + Omdurman + Darfur
-    "Somalia":         6.0,   # Mogadishu; al-Shabaab coverage
-    "Libya":           7.0,   # Tripoli + Benghazi + Misrata
-    "Egypt":          10.0,   # Cairo + Alexandria + others
-    "Algeria":         6.0,   # Algiers + Oran + Constantine
-    "Morocco":         7.0,   # Rabat + Casablanca + Marrakech
-    "Myanmar":         8.0,   # Naypyidaw + Yangon + Mandalay
-    "Indonesia":       9.0,   # Jakarta + Surabaya + others
-    "Vietnam":         7.0,   # Hanoi + Ho Chi Minh City + others
-    "Armenia":         5.0,   # Yerevan; small country
-    "Azerbaijan":      5.0,   # Baku + Ganja
-    "Denmark":         7.0,   # Copenhagen + Greenland coverage
+    "Russia":         25.0,   # Moscow + SPb; consistent war-adjacent coverage
+    "China":          20.0,   # Beijing + Shanghai + cities; trade/geopolitics staple
+    "Ukraine":        20.0,   # Kyiv + front-line cities; ongoing war baseline
+    "Israel":         15.0,   # Jerusalem + Tel Aviv; quiet-day estimate (currently spiked)
+    "Palestine":       8.0,   # Gaza + West Bank; currently quiet relative to Israel
+    "Iran":           15.0,   # Tehran + cities; currently massively spiked, seed = quiet
+    "United Kingdom": 15.0,   # London + cities; home-source weighted down
+    "Germany":         8.0,   # Berlin + cities; observed ~1-6 today
+    "France":          8.0,   # Paris + cities; observed ~6-9 today
+    "India":           8.0,   # Observed consistently ~8; cities add little extra
+    "Pakistan":        5.0,   # Karachi + Lahore; sporadically covered
+    "North Korea":     5.0,   # Pyongyang; steady low-level coverage
+    "South Korea":     6.0,   # Seoul + Busan; tech/politics coverage
+    "Japan":           8.0,   # Tokyo + Osaka; consistent coverage
+    "Taiwan":          6.0,   # Taipei; China-tension driven
+    "Syria":           6.0,   # Damascus + Aleppo; quiet-day estimate (currently elevated)
+    "Turkey":          6.0,   # Istanbul + Ankara; moderate steady coverage
+    "Saudi Arabia":    5.0,   # Riyadh + Jeddah; observed ~1-2 today, seed more generous
+    "UAE":             5.0,   # Dubai + Abu Dhabi; observed ~6-7 today
+    "Yemen":           4.0,   # Sanaa + Aden; Houthi coverage, sporadic
+    "Canada":          6.0,   # Ottawa + Toronto + Vancouver; home-source weighted
+    "Mexico":          5.0,   # Mexico City + others; observed ~2-3 today
+    "Brazil":          6.0,   # Sao Paulo + Rio; observed ~2-3 today, cities should help
+    "Colombia":        6.0,   # Bogota + Medellin; observed 7-19 (possible spike today)
+    "Venezuela":       4.0,   # Caracas; observed ~2-3
+    "Cuba":            3.0,   # Havana; observed ~1
+    "Argentina":       5.0,   # Buenos Aires; sporadic Milei/economy coverage
+    "Chile":           4.0,   # Santiago; observed ~1-3
+    "Peru":            3.0,   # Lima; low coverage
+    "Panama":          3.0,   # Panama City/Canal; Trump rhetoric drives spikes
+    "El Salvador":     3.0,   # San Salvador; Bukele coverage
+    "Nigeria":         5.0,   # Lagos + Abuja; observed 0-18 (spike today)
+    "Sudan":           4.0,   # Khartoum + Darfur; ongoing conflict, sporadic
+    "Somalia":         3.0,   # Mogadishu; al-Shabaab coverage, sporadic
+    "Libya":           3.0,   # Tripoli + Benghazi; low steady coverage
+    "Egypt":           5.0,   # Cairo + Alexandria; regional hub coverage
+    "Algeria":         3.0,   # Algiers; low coverage
+    "Morocco":         4.0,   # Casablanca + Rabat; moderate coverage
+    "Myanmar":         4.0,   # Yangon; civil war coverage, sporadic
+    "Indonesia":       4.0,   # Jakarta; large country, underreported in Western press
+    "Vietnam":         3.0,   # Ho Chi Minh + Hanoi; low Western coverage
+    "Armenia":         3.0,   # Yerevan; post-Karabakh, sporadic
+    "Azerbaijan":      3.0,   # Baku; post-Karabakh, sporadic
+    "Denmark":         5.0,   # Copenhagen + Greenland; elevated due to Trump/Greenland
 }
 
 def _seed_std(mean: float) -> float:
