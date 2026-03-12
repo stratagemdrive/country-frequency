@@ -1,0 +1,763 @@
+{
+  "meta": {
+    "generated_at": "2026-03-12T17:20:24.578361Z",
+    "window_start": "2026-03-11T17:20:24.578361Z",
+    "window_end": "2026-03-12T17:20:24.578361Z",
+    "window_hours": 24,
+    "articles_scanned": 1192,
+    "articles_in_window": 494,
+    "sources_count": 30,
+    "trending_threshold_z": 2.0,
+    "elevated_threshold_z": 1.0
+  },
+  "countries": [
+    {
+      "country": "Iran",
+      "iso2": "IR",
+      "mentions": 183,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 183
+        }
+      ]
+    },
+    {
+      "country": "Israel",
+      "iso2": "IL",
+      "mentions": 44,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 44
+        }
+      ]
+    },
+    {
+      "country": "United Kingdom",
+      "iso2": "GB",
+      "mentions": 26,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 26
+        }
+      ]
+    },
+    {
+      "country": "Russia",
+      "iso2": "RU",
+      "mentions": 25,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 25
+        }
+      ]
+    },
+    {
+      "country": "China",
+      "iso2": "CN",
+      "mentions": 20,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 20
+        }
+      ]
+    },
+    {
+      "country": "Syria",
+      "iso2": "SY",
+      "mentions": 19,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 19
+        }
+      ]
+    },
+    {
+      "country": "Ukraine",
+      "iso2": "UA",
+      "mentions": 17,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 17
+        }
+      ]
+    },
+    {
+      "country": "India",
+      "iso2": "IN",
+      "mentions": 8,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 8
+        }
+      ]
+    },
+    {
+      "country": "Canada",
+      "iso2": "CA",
+      "mentions": 7,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 7
+        }
+      ]
+    },
+    {
+      "country": "France",
+      "iso2": "FR",
+      "mentions": 7,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 7
+        }
+      ]
+    },
+    {
+      "country": "Colombia",
+      "iso2": "CO",
+      "mentions": 7,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 7
+        }
+      ]
+    },
+    {
+      "country": "UAE",
+      "iso2": "AE",
+      "mentions": 6,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 6
+        }
+      ]
+    },
+    {
+      "country": "North Korea",
+      "iso2": "KP",
+      "mentions": 5,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 5
+        }
+      ]
+    },
+    {
+      "country": "Denmark",
+      "iso2": "DK",
+      "mentions": 5,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 5
+        }
+      ]
+    },
+    {
+      "country": "Japan",
+      "iso2": "JP",
+      "mentions": 4,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 4
+        }
+      ]
+    },
+    {
+      "country": "Palestine",
+      "iso2": "PS",
+      "mentions": 3,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 3
+        }
+      ]
+    },
+    {
+      "country": "Chile",
+      "iso2": "CL",
+      "mentions": 3,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 3
+        }
+      ]
+    },
+    {
+      "country": "Mexico",
+      "iso2": "MX",
+      "mentions": 2,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        }
+      ]
+    },
+    {
+      "country": "Brazil",
+      "iso2": "BR",
+      "mentions": 2,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        }
+      ]
+    },
+    {
+      "country": "Venezuela",
+      "iso2": "VE",
+      "mentions": 2,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        }
+      ]
+    },
+    {
+      "country": "Taiwan",
+      "iso2": "TW",
+      "mentions": 2,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        }
+      ]
+    },
+    {
+      "country": "South Korea",
+      "iso2": "KR",
+      "mentions": 2,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        }
+      ]
+    },
+    {
+      "country": "Sudan",
+      "iso2": "SD",
+      "mentions": 2,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        }
+      ]
+    },
+    {
+      "country": "Germany",
+      "iso2": "DE",
+      "mentions": 1,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 1
+        }
+      ]
+    },
+    {
+      "country": "Saudi Arabia",
+      "iso2": "SA",
+      "mentions": 1,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 1
+        }
+      ]
+    },
+    {
+      "country": "Peru",
+      "iso2": "PE",
+      "mentions": 1,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 1
+        }
+      ]
+    },
+    {
+      "country": "Cuba",
+      "iso2": "CU",
+      "mentions": 1,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 1
+        }
+      ]
+    },
+    {
+      "country": "Pakistan",
+      "iso2": "PK",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Nigeria",
+      "iso2": "NG",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Turkey",
+      "iso2": "TR",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Vietnam",
+      "iso2": "VN",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Indonesia",
+      "iso2": "ID",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Myanmar",
+      "iso2": "MM",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Armenia",
+      "iso2": "AM",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Azerbaijan",
+      "iso2": "AZ",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Morocco",
+      "iso2": "MA",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Somalia",
+      "iso2": "SO",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Yemen",
+      "iso2": "YE",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Libya",
+      "iso2": "LY",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Egypt",
+      "iso2": "EG",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Algeria",
+      "iso2": "DZ",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Argentina",
+      "iso2": "AR",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "Panama",
+      "iso2": "PA",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    },
+    {
+      "country": "El Salvador",
+      "iso2": "SV",
+      "mentions": 0,
+      "baseline_mean": 0.0,
+      "baseline_std": 0.0,
+      "baseline_n": 0,
+      "z_score": 0.0,
+      "trend_status": "normal",
+      "pct_change": null,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 0
+        }
+      ]
+    }
+  ]
+}
