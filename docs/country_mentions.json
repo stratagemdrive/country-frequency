@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2026-03-12T17:20:24.578361Z",
-    "window_start": "2026-03-11T17:20:24.578361Z",
-    "window_end": "2026-03-12T17:20:24.578361Z",
+    "generated_at": "2026-03-12T18:30:15.937999Z",
+    "window_start": "2026-03-11T18:30:15.937999Z",
+    "window_end": "2026-03-12T18:30:15.937999Z",
     "window_hours": 24,
     "articles_scanned": 1192,
-    "articles_in_window": 494,
+    "articles_in_window": 497,
     "sources_count": 30,
     "trending_threshold_z": 2.0,
     "elevated_threshold_z": 1.0
@@ -14,748 +14,968 @@
     {
       "country": "Iran",
       "iso2": "IR",
-      "mentions": 183,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
+      "mentions": 185.0,
+      "baseline_mean": 12.0,
+      "baseline_std": 4.8,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 36.042,
+      "trend_status": "trending",
+      "pct_change": 1441.7,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 183
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 185.0
         }
       ]
     },
     {
       "country": "Israel",
       "iso2": "IL",
-      "mentions": 44,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
+      "mentions": 40.0,
+      "baseline_mean": 22.0,
+      "baseline_std": 8.8,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 2.045,
+      "trend_status": "trending",
+      "pct_change": 81.8,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 44
-        }
-      ]
-    },
-    {
-      "country": "United Kingdom",
-      "iso2": "GB",
-      "mentions": 26,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
-      "history": [
+        },
         {
-          "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 26
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 40.0
         }
       ]
     },
     {
       "country": "Russia",
       "iso2": "RU",
-      "mentions": 25,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 26.0,
+      "baseline_mean": 30.0,
+      "baseline_std": 12.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 0.61,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -13.3,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 25
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 26.0
         }
       ]
     },
     {
       "country": "China",
       "iso2": "CN",
-      "mentions": 20,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 19.0,
+      "baseline_mean": 25.0,
+      "baseline_std": 10.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 0.363,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -24.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 20
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 19.0
         }
       ]
     },
     {
       "country": "Syria",
       "iso2": "SY",
-      "mentions": 19,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
+      "mentions": 17.0,
+      "baseline_mean": 5.0,
+      "baseline_std": 2.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 6.0,
+      "trend_status": "trending",
+      "pct_change": 240.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 19
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 17.0
         }
       ]
     },
     {
       "country": "Ukraine",
       "iso2": "UA",
-      "mentions": 17,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 17.0,
+      "baseline_mean": 28.0,
+      "baseline_std": 11.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 0.292,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -39.3,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 17
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 17.0
+        }
+      ]
+    },
+    {
+      "country": "United Kingdom",
+      "iso2": "GB",
+      "mentions": 12.25,
+      "baseline_mean": 18.0,
+      "baseline_std": 7.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 0.125,
+      "trend_status": "normal",
+      "pct_change": -31.9,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 26
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 12.25
         }
       ]
     },
     {
       "country": "India",
       "iso2": "IN",
-      "mentions": 8,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 8.0,
+      "baseline_mean": 10.0,
+      "baseline_std": 4.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.025,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -20.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 8
-        }
-      ]
-    },
-    {
-      "country": "Canada",
-      "iso2": "CA",
-      "mentions": 7,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
-      "history": [
+        },
         {
-          "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 7
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 8.0
         }
       ]
     },
     {
       "country": "France",
       "iso2": "FR",
-      "mentions": 7,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 7.0,
+      "baseline_mean": 9.0,
+      "baseline_std": 3.6,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.061,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -22.2,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 7
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 7.0
         }
       ]
     },
     {
       "country": "Colombia",
       "iso2": "CO",
-      "mentions": 7,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
+      "mentions": 7.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 3.333,
+      "trend_status": "trending",
+      "pct_change": 133.3,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 7
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 7.0
         }
       ]
     },
     {
       "country": "UAE",
       "iso2": "AE",
-      "mentions": 6,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 6.0,
+      "baseline_mean": 5.0,
+      "baseline_std": 2.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 0.5,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": 20.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 6
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 6.0
         }
       ]
     },
     {
       "country": "North Korea",
       "iso2": "KP",
-      "mentions": 5,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
+      "mentions": 5.0,
+      "baseline_mean": 5.0,
+      "baseline_std": 2.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
       "z_score": 0.0,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": 0.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 5
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 5.0
         }
       ]
     },
     {
-      "country": "Denmark",
-      "iso2": "DK",
-      "mentions": 5,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "country": "Canada",
+      "iso2": "CA",
+      "mentions": 4.25,
+      "baseline_mean": 8.0,
+      "baseline_std": 3.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.157,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -46.9,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 5
-        }
-      ]
-    },
-    {
-      "country": "Japan",
-      "iso2": "JP",
-      "mentions": 4,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
-      "history": [
+          "mentions": 7
+        },
         {
-          "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 4
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 4.25
         }
       ]
     },
     {
       "country": "Palestine",
       "iso2": "PS",
-      "mentions": 3,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 4.0,
+      "baseline_mean": 8.0,
+      "baseline_std": 3.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.166,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -50.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 3
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 4.0
         }
       ]
     },
     {
-      "country": "Chile",
-      "iso2": "CL",
-      "mentions": 3,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "country": "Japan",
+      "iso2": "JP",
+      "mentions": 4.0,
+      "baseline_mean": 7.0,
+      "baseline_std": 2.8,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.166,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -42.9,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 3
+          "mentions": 4
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 4.0
         }
       ]
     },
     {
-      "country": "Mexico",
-      "iso2": "MX",
-      "mentions": 2,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
+      "country": "Denmark",
+      "iso2": "DK",
+      "mentions": 4.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 2.0,
+      "trend_status": "trending",
+      "pct_change": 100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 2
+          "mentions": 5
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 4.0
         }
       ]
     },
     {
       "country": "Brazil",
       "iso2": "BR",
-      "mentions": 2,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 3.0,
+      "baseline_mean": 5.0,
+      "baseline_std": 2.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.202,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -40.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 2
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 3.0
         }
       ]
     },
     {
       "country": "Venezuela",
       "iso2": "VE",
-      "mentions": 2,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
+      "mentions": 3.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
       "z_score": 0.0,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": 0.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 2
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 3.0
         }
       ]
     },
     {
-      "country": "Taiwan",
-      "iso2": "TW",
-      "mentions": 2,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
+      "country": "Chile",
+      "iso2": "CL",
+      "mentions": 3.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": 1.0,
+      "trend_status": "elevated",
+      "pct_change": 50.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 2
-        }
-      ]
-    },
-    {
-      "country": "South Korea",
-      "iso2": "KR",
-      "mentions": 2,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
-      "history": [
+          "mentions": 3
+        },
         {
-          "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 2
-        }
-      ]
-    },
-    {
-      "country": "Sudan",
-      "iso2": "SD",
-      "mentions": 2,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
-      "history": [
-        {
-          "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 2
-        }
-      ]
-    },
-    {
-      "country": "Germany",
-      "iso2": "DE",
-      "mentions": 1,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
-      "trend_status": "normal",
-      "pct_change": null,
-      "history": [
-        {
-          "window_end": "2026-03-12T17:20:24.578361Z",
-          "mentions": 1
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 3.0
         }
       ]
     },
     {
       "country": "Saudi Arabia",
       "iso2": "SA",
-      "mentions": 1,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 2.0,
+      "baseline_mean": 7.0,
+      "baseline_std": 2.8,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.237,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -71.4,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 1
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 2.0
         }
       ]
     },
     {
-      "country": "Peru",
-      "iso2": "PE",
-      "mentions": 1,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "country": "Mexico",
+      "iso2": "MX",
+      "mentions": 2.0,
+      "baseline_mean": 6.0,
+      "baseline_std": 2.4,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.237,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -66.7,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 2.0
+        }
+      ]
+    },
+    {
+      "country": "Germany",
+      "iso2": "DE",
+      "mentions": 1.0,
+      "baseline_mean": 10.0,
+      "baseline_std": 4.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.272,
+      "trend_status": "normal",
+      "pct_change": -90.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 1
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 1.0
+        }
+      ]
+    },
+    {
+      "country": "Taiwan",
+      "iso2": "TW",
+      "mentions": 1.0,
+      "baseline_mean": 6.0,
+      "baseline_std": 2.4,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.272,
+      "trend_status": "normal",
+      "pct_change": -83.3,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 1.0
+        }
+      ]
+    },
+    {
+      "country": "South Korea",
+      "iso2": "KR",
+      "mentions": 1.0,
+      "baseline_mean": 5.0,
+      "baseline_std": 2.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.272,
+      "trend_status": "normal",
+      "pct_change": -80.0,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 1.0
         }
       ]
     },
     {
       "country": "Cuba",
       "iso2": "CU",
-      "mentions": 1,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 1.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.272,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -50.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 1
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 1.0
+        }
+      ]
+    },
+    {
+      "country": "Sudan",
+      "iso2": "SD",
+      "mentions": 1.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.272,
+      "trend_status": "normal",
+      "pct_change": -66.7,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 2
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 1.0
         }
       ]
     },
     {
       "country": "Pakistan",
       "iso2": "PK",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 6.0,
+      "baseline_std": 2.4,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Nigeria",
       "iso2": "NG",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Turkey",
       "iso2": "TR",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 6.0,
+      "baseline_std": 2.4,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Vietnam",
       "iso2": "VN",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Indonesia",
       "iso2": "ID",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Myanmar",
       "iso2": "MM",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Armenia",
       "iso2": "AM",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Azerbaijan",
       "iso2": "AZ",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Morocco",
       "iso2": "MA",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Somalia",
       "iso2": "SO",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Yemen",
       "iso2": "YE",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 4.0,
+      "baseline_std": 1.6,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Libya",
       "iso2": "LY",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Egypt",
       "iso2": "EG",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Algeria",
       "iso2": "DZ",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Argentina",
       "iso2": "AR",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 3.0,
+      "baseline_std": 1.2,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
+        }
+      ]
+    },
+    {
+      "country": "Peru",
+      "iso2": "PE",
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
+      "trend_status": "normal",
+      "pct_change": -100.0,
+      "history": [
+        {
+          "window_end": "2026-03-12T17:20:24.578361Z",
+          "mentions": 1
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "Panama",
       "iso2": "PA",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     },
     {
       "country": "El Salvador",
       "iso2": "SV",
-      "mentions": 0,
-      "baseline_mean": 0.0,
-      "baseline_std": 0.0,
-      "baseline_n": 0,
-      "z_score": 0.0,
+      "mentions": 0.0,
+      "baseline_mean": 2.0,
+      "baseline_std": 1.0,
+      "baseline_n": 1,
+      "baseline_method": "cold_start_hybrid",
+      "z_score": -0.307,
       "trend_status": "normal",
-      "pct_change": null,
+      "pct_change": -100.0,
       "history": [
         {
           "window_end": "2026-03-12T17:20:24.578361Z",
           "mentions": 0
+        },
+        {
+          "window_end": "2026-03-12T18:30:15.937999Z",
+          "mentions": 0.0
         }
       ]
     }
