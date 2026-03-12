@@ -8,23 +8,19 @@ flags trending countries, and writes public/country_mentions.json.
 
 JSON shape (Base44-friendly):
 {
-  "meta": {
-    "generated_at": "2026-05-02T23:54:00Z",
-    "window_start":  "2026-05-01T23:54:00Z",
-    "window_end":    "2026-05-02T23:54:00Z",
-    "window_hours":  24,
-    "articles_scanned": 1234
-  },
+  "meta": { ... },
   "countries": [
     {
-      "country":       "Russia",
-      "iso2":          "RU",
-      "mentions":      42,
-      "baseline_mean": 31.4,
-      "baseline_std":  6.2,
-      "z_score":       1.71,
-      "trend_status":  "trending",   // "trending" | "elevated" | "normal" | "low"
-      "pct_change":    33.8,
+      "country":          "Russia",
+      "iso2":             "RU",
+      "mentions":         42,
+      "baseline_mean":    31.4,
+      "baseline_std":     6.2,
+      "baseline_n":       14,
+      "baseline_method":  "rolling_7d",
+      "z_score":          1.71,
+      "trend_status":     "trending",   // "trending" | "elevated" | "normal" | "low"
+      "pct_change":       33.8,
       "history": [
         { "window_end": "2026-04-26T11:54:00Z", "mentions": 28 },
         ...
@@ -39,6 +35,12 @@ trend_status logic:
   z >= 1.0  → "elevated"
   z <= -1.0 → "low"
   else      → "normal"
+
+Cold-start behaviour (< BASELINE_MIN_RUNS history points):
+  Falls back to a hybrid score combining:
+    (a) seed baseline (realistic long-term averages per country), AND
+    (b) relative ranking within the current run's distribution.
+  This means Iran at 183 mentions is correctly flagged "trending" on run #1.
 """
 
 from __future__ import annotations
@@ -46,12 +48,11 @@ from __future__ import annotations
 import json
 import re
 import time
-import hashlib
+import math
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
-import math
 
 import feedparser
 import requests
@@ -62,14 +63,14 @@ from dateutil import parser as dtparser
 # CONFIG
 # ──────────────────────────────────────────────────────────
 
-WINDOW_HOURS = 24
-HISTORY_DAYS = 90          # keep at most 90 days of history per country
-BASELINE_MIN_RUNS = 3      # need at least this many history points before z-score is meaningful
-TRENDING_Z    = 2.0        # z ≥ 2.0  → trending
-ELEVATED_Z    = 1.0        # z ≥ 1.0  → elevated
-LOW_Z         = -1.0       # z ≤ -1.0 → low
+WINDOW_HOURS      = 24
+HISTORY_DAYS      = 90
+BASELINE_MIN_RUNS = 3      # history points needed before full z-score kicks in
+TRENDING_Z        = 2.0
+ELEVATED_Z        = 1.0
+LOW_Z             = -1.0
 
-TIMEOUT    = 20
+TIMEOUT     = 20
 MAX_RETRIES = 3
 RETRY_SLEEP = 1.2
 
@@ -86,6 +87,96 @@ HEADERS = {
 OUTPUT_DIR  = Path("public")
 OUTPUT_FILE = OUTPUT_DIR / "country_mentions.json"
 
+# ── Source-bias discount ───────────────────────────────────
+# When a source mentions its OWN country, that mention is
+# worth HOME_SOURCE_WEIGHT instead of 1.0 to dampen ambient
+# domestic references (e.g. BBC constantly saying "London",
+# CBC constantly saying "Canada").
+# 0.25 = one home-source mention ≈ one-quarter of a foreign mention.
+HOME_SOURCE_WEIGHT: float = 0.25
+
+# Maps each source name → the country it is "home" to.
+# Only UK and Canadian outlets need entries; US outlets cover
+# the US itself which is not in our tracked-country list.
+SOURCE_HOME_COUNTRY: Dict[str, str] = {
+    # UK outlets  →  United Kingdom
+    "BBC World":       "United Kingdom",
+    "The Guardian":    "United Kingdom",
+    "The Times UK":    "United Kingdom",
+    "The Telegraph":   "United Kingdom",
+    "The Independent": "United Kingdom",
+    "Sky News":        "United Kingdom",
+    "The Economist":   "United Kingdom",
+    "Financial Times": "United Kingdom",
+    # Canadian outlets  →  Canada
+    "CBC World":       "Canada",
+    "Globe and Mail":  "Canada",
+    "National Post":   "Canada",
+    "Toronto Star":    "Canada",
+    "CTV News":        "Canada",
+}
+
+
+# ──────────────────────────────────────────────────────────
+# SEED BASELINE
+# ──────────────────────────────────────────────────────────
+# Realistic "quiet news day" mean mention counts per country
+# across ~500 articles from 30 sources in a 24h window.
+# Used as the baseline on run #1 (cold start) so trending
+# detection works immediately without waiting for history to build.
+# Std is set to 40% of mean (reasonable for news counts).
+
+SEED_BASELINE: Dict[str, float] = {
+    "Russia":         30.0,
+    "China":          25.0,
+    "Ukraine":        28.0,
+    "Israel":         22.0,
+    "Palestine":       8.0,
+    "Iran":           12.0,
+    "United Kingdom": 18.0,
+    "Germany":        10.0,
+    "France":          9.0,
+    "India":          10.0,
+    "Pakistan":        6.0,
+    "North Korea":     5.0,
+    "South Korea":     5.0,
+    "Japan":           7.0,
+    "Taiwan":          6.0,
+    "Syria":           5.0,
+    "Turkey":          6.0,
+    "Saudi Arabia":    7.0,
+    "UAE":             5.0,
+    "Yemen":           4.0,
+    "Canada":          8.0,
+    "Mexico":          6.0,
+    "Brazil":          5.0,
+    "Colombia":        3.0,
+    "Venezuela":       3.0,
+    "Cuba":            2.0,
+    "Argentina":       3.0,
+    "Chile":           2.0,
+    "Peru":            2.0,
+    "Panama":          2.0,
+    "El Salvador":     2.0,
+    "Nigeria":         3.0,
+    "Sudan":           3.0,
+    "Somalia":         2.0,
+    "Libya":           2.0,
+    "Egypt":           3.0,
+    "Algeria":         2.0,
+    "Morocco":         2.0,
+    "Myanmar":         3.0,
+    "Indonesia":       3.0,
+    "Vietnam":         2.0,
+    "Armenia":         2.0,
+    "Azerbaijan":      2.0,
+    "Denmark":         2.0,
+}
+
+def _seed_std(mean: float) -> float:
+    """Std = 40% of mean, floor of 1.0 to avoid division-by-zero."""
+    return max(1.0, mean * 0.4)
+
 
 # ──────────────────────────────────────────────────────────
 # 30 CREDIBLE US / UK / CA NEWS SOURCES  (RSS)
@@ -93,96 +184,94 @@ OUTPUT_FILE = OUTPUT_DIR / "country_mentions.json"
 
 RSS_SOURCES: Dict[str, str] = {
     # ── United States ──────────────────────────────────────
-    "AP News":           "https://rsshub.app/apnews/topics/ap-top-news",
-    "Reuters":           "https://feeds.reuters.com/reuters/topNews",
-    "NPR World":         "https://www.npr.org/rss/rss.php?id=1004",
-    "PBS NewsHour":      "https://www.pbs.org/newshour/feeds/rss/world",
-    "ABC News":          "https://feeds.abcnews.com/abcnews/internationalheadlines",
-    "CBS News":          "https://www.cbsnews.com/latest/rss/world",
-    "NBC News":          "https://feeds.nbcnews.com/nbcnews/public/world",
-    "CNN":               "http://rss.cnn.com/rss/edition_world.rss",
-    "Fox News":          "https://moxie.foxnews.com/google-publisher/world.xml",
-    "The New York Times":"https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
-    "Washington Post":   "https://feeds.washingtonpost.com/rss/world",
-    "Wall Street Journal":"https://feeds.a.dj.com/rss/RSSWorldNews.xml",
-    "Politico":          "https://rss.politico.com/politics-news.xml",
-    "The Hill":          "https://thehill.com/feed/",
-    "Foreign Policy":    "https://foreignpolicy.com/feed/",
-    "Defense One":       "https://www.defenseone.com/rss/all/",
-    "Voice of America":  "https://www.voanews.com/api/zk_$egt",
+    "AP News":             "https://rsshub.app/apnews/topics/ap-top-news",
+    "Reuters":             "https://feeds.reuters.com/reuters/topNews",
+    "NPR World":           "https://www.npr.org/rss/rss.php?id=1004",
+    "PBS NewsHour":        "https://www.pbs.org/newshour/feeds/rss/world",
+    "ABC News":            "https://feeds.abcnews.com/abcnews/internationalheadlines",
+    "CBS News":            "https://www.cbsnews.com/latest/rss/world",
+    "NBC News":            "https://feeds.nbcnews.com/nbcnews/public/world",
+    "CNN":                 "http://rss.cnn.com/rss/edition_world.rss",
+    "Fox News":            "https://moxie.foxnews.com/google-publisher/world.xml",
+    "New York Times":      "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+    "Washington Post":     "https://feeds.washingtonpost.com/rss/world",
+    "Wall Street Journal": "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+    "Politico":            "https://rss.politico.com/politics-news.xml",
+    "The Hill":            "https://thehill.com/feed/",
+    "Foreign Policy":      "https://foreignpolicy.com/feed/",
+    "Defense One":         "https://www.defenseone.com/rss/all/",
+    "Voice of America":    "https://www.voanews.com/api/zk_$egt",
 
     # ── United Kingdom ─────────────────────────────────────
-    "BBC World":         "https://feeds.bbci.co.uk/news/world/rss.xml",
-    "The Guardian":      "https://www.theguardian.com/world/rss",
-    "The Times UK":      "https://www.thetimes.co.uk/rss/world.xml",
-    "The Telegraph":     "https://www.telegraph.co.uk/rss.xml",
-    "The Independent":   "https://www.independent.co.uk/news/world/rss",
-    "Sky News":          "https://feeds.skynews.com/feeds/rss/world.xml",
-    "The Economist":     "https://www.economist.com/international/rss.xml",
-    "Financial Times":   "https://www.ft.com/world?format=rss",
+    "BBC World":           "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "The Guardian":        "https://www.theguardian.com/world/rss",
+    "The Times UK":        "https://www.thetimes.co.uk/rss/world.xml",
+    "The Telegraph":       "https://www.telegraph.co.uk/rss.xml",
+    "The Independent":     "https://www.independent.co.uk/news/world/rss",
+    "Sky News":            "https://feeds.skynews.com/feeds/rss/world.xml",
+    "The Economist":       "https://www.economist.com/international/rss.xml",
+    "Financial Times":     "https://www.ft.com/world?format=rss",
 
     # ── Canada ─────────────────────────────────────────────
-    "CBC World":         "https://rss.cbc.ca/lineup/world.xml",
-    "Globe and Mail":    "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/world/",
-    "National Post":     "https://nationalpost.com/feed/",
-    "Toronto Star":      "https://www.thestar.com/content/thestar/feed.rss",
-    "CTV News":          "https://www.ctvnews.ca/rss/ctvnews-ca-world-public-rss-1.822289",
+    "CBC World":           "https://rss.cbc.ca/lineup/world.xml",
+    "Globe and Mail":      "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/world/",
+    "National Post":       "https://nationalpost.com/feed/",
+    "Toronto Star":        "https://www.thestar.com/content/thestar/feed.rss",
+    "CTV News":            "https://www.ctvnews.ca/rss/ctvnews-ca-world-public-rss-1.822289",
 }
 
 
 # ──────────────────────────────────────────────────────────
-# TRACKED COUNTRIES  (44 countries)
+# TRACKED COUNTRIES
 # ──────────────────────────────────────────────────────────
 
 COUNTRIES = [
-    {"country": "Russia",        "iso2": "RU"},
-    {"country": "India",         "iso2": "IN"},
-    {"country": "Pakistan",      "iso2": "PK"},
-    {"country": "China",         "iso2": "CN"},
-    {"country": "United Kingdom","iso2": "GB"},
-    {"country": "Germany",       "iso2": "DE"},
-    {"country": "UAE",           "iso2": "AE"},
-    {"country": "Saudi Arabia",  "iso2": "SA"},
-    {"country": "Israel",        "iso2": "IL"},
-    {"country": "Palestine",     "iso2": "PS"},
-    {"country": "Mexico",        "iso2": "MX"},
-    {"country": "Brazil",        "iso2": "BR"},
-    {"country": "Canada",        "iso2": "CA"},
-    {"country": "Nigeria",       "iso2": "NG"},
-    {"country": "Japan",         "iso2": "JP"},
-    {"country": "Iran",          "iso2": "IR"},
-    {"country": "Syria",         "iso2": "SY"},
-    {"country": "France",        "iso2": "FR"},
-    {"country": "Turkey",        "iso2": "TR"},
-    {"country": "Venezuela",     "iso2": "VE"},
-    {"country": "Vietnam",       "iso2": "VN"},
-    {"country": "Taiwan",        "iso2": "TW"},
-    {"country": "South Korea",   "iso2": "KR"},
-    {"country": "North Korea",   "iso2": "KP"},
-    {"country": "Indonesia",     "iso2": "ID"},
-    {"country": "Myanmar",       "iso2": "MM"},
-    {"country": "Armenia",       "iso2": "AM"},
-    {"country": "Azerbaijan",    "iso2": "AZ"},
-    {"country": "Morocco",       "iso2": "MA"},
-    {"country": "Somalia",       "iso2": "SO"},
-    {"country": "Yemen",         "iso2": "YE"},
-    {"country": "Libya",         "iso2": "LY"},
-    {"country": "Egypt",         "iso2": "EG"},
-    {"country": "Algeria",       "iso2": "DZ"},
-    {"country": "Argentina",     "iso2": "AR"},
-    {"country": "Chile",         "iso2": "CL"},
-    {"country": "Peru",          "iso2": "PE"},
-    {"country": "Cuba",          "iso2": "CU"},
-    {"country": "Colombia",      "iso2": "CO"},
-    {"country": "Panama",        "iso2": "PA"},
-    {"country": "El Salvador",   "iso2": "SV"},
-    {"country": "Denmark",       "iso2": "DK"},
-    {"country": "Sudan",         "iso2": "SD"},
-    {"country": "Ukraine",       "iso2": "UA"},
+    {"country": "Russia",         "iso2": "RU"},
+    {"country": "India",          "iso2": "IN"},
+    {"country": "Pakistan",       "iso2": "PK"},
+    {"country": "China",          "iso2": "CN"},
+    {"country": "United Kingdom", "iso2": "GB"},
+    {"country": "Germany",        "iso2": "DE"},
+    {"country": "UAE",            "iso2": "AE"},
+    {"country": "Saudi Arabia",   "iso2": "SA"},
+    {"country": "Israel",         "iso2": "IL"},
+    {"country": "Palestine",      "iso2": "PS"},
+    {"country": "Mexico",         "iso2": "MX"},
+    {"country": "Brazil",         "iso2": "BR"},
+    {"country": "Canada",         "iso2": "CA"},
+    {"country": "Nigeria",        "iso2": "NG"},
+    {"country": "Japan",          "iso2": "JP"},
+    {"country": "Iran",           "iso2": "IR"},
+    {"country": "Syria",          "iso2": "SY"},
+    {"country": "France",         "iso2": "FR"},
+    {"country": "Turkey",         "iso2": "TR"},
+    {"country": "Venezuela",      "iso2": "VE"},
+    {"country": "Vietnam",        "iso2": "VN"},
+    {"country": "Taiwan",         "iso2": "TW"},
+    {"country": "South Korea",    "iso2": "KR"},
+    {"country": "North Korea",    "iso2": "KP"},
+    {"country": "Indonesia",      "iso2": "ID"},
+    {"country": "Myanmar",        "iso2": "MM"},
+    {"country": "Armenia",        "iso2": "AM"},
+    {"country": "Azerbaijan",     "iso2": "AZ"},
+    {"country": "Morocco",        "iso2": "MA"},
+    {"country": "Somalia",        "iso2": "SO"},
+    {"country": "Yemen",          "iso2": "YE"},
+    {"country": "Libya",          "iso2": "LY"},
+    {"country": "Egypt",          "iso2": "EG"},
+    {"country": "Algeria",        "iso2": "DZ"},
+    {"country": "Argentina",      "iso2": "AR"},
+    {"country": "Chile",          "iso2": "CL"},
+    {"country": "Peru",           "iso2": "PE"},
+    {"country": "Cuba",           "iso2": "CU"},
+    {"country": "Colombia",       "iso2": "CO"},
+    {"country": "Panama",         "iso2": "PA"},
+    {"country": "El Salvador",    "iso2": "SV"},
+    {"country": "Denmark",        "iso2": "DK"},
+    {"country": "Sudan",          "iso2": "SD"},
+    {"country": "Ukraine",        "iso2": "UA"},
 ]
 
-# ── Per-country search terms (aliases + demonyms + capitals) ──────────────
-# Keys must match the "country" field above exactly.
 COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Russia":         ["russia", "russian", "russians", "moscow", "kremlin", "putin"],
     "India":          ["india", "indian", "indians", "new delhi", "modi"],
@@ -203,7 +292,7 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Nigeria":        ["nigeria", "nigerian", "nigerians", "abuja", "lagos"],
     "Japan":          ["japan", "japanese", "tokyo", "kishida", "ishiba"],
     "Iran":           ["iran", "iranian", "iranians", "tehran", "khamenei",
-                       "irgc", "rouhani", "raisi"],
+                       "irgc", "rouhani", "raisi", "pezeshkian", "hormuz"],
     "Syria":          ["syria", "syrian", "syrians", "damascus", "al-sharaa", "hts"],
     "France":         ["france", "french", "paris", "macron", "elysee"],
     "Turkey":         ["turkey", "turkish", "ankara", "erdogan", "istanbul"],
@@ -227,10 +316,8 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Peru":           ["peru", "peruvian", "peruvians", "lima"],
     "Cuba":           ["cuba", "cuban", "cubans", "havana"],
     "Colombia":       ["colombia", "colombian", "colombians", "bogota", "petro"],
-    "Panama":         ["panama", "panamanian", "panamanians", "panama city",
-                       "panama canal"],
-    "El Salvador":    ["el salvador", "salvadoran", "salvadorans", "san salvador",
-                       "bukele"],
+    "Panama":         ["panama", "panamanian", "panamanians", "panama city", "panama canal"],
+    "El Salvador":    ["el salvador", "salvadoran", "salvadorans", "san salvador", "bukele"],
     "Denmark":        ["denmark", "danish", "danes", "copenhagen", "greenland"],
     "Sudan":          ["sudan", "sudanese", "khartoum", "rsf", "darfur"],
     "Ukraine":        ["ukraine", "ukrainian", "ukrainians", "kyiv", "kiev",
@@ -282,8 +369,8 @@ def canonicalize_url(url: str) -> str:
     try:
         u = urlparse(url)
         qs = parse_qs(u.query, keep_blank_values=True)
-        drop = {"utm_source","utm_medium","utm_campaign","utm_term","utm_content",
-                "fbclid","gclid","mc_cid","mc_eid"}
+        drop = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+                "fbclid", "gclid", "mc_cid", "mc_eid"}
         for p in list(qs.keys()):
             if p.lower() in drop:
                 qs.pop(p, None)
@@ -295,18 +382,18 @@ def canonicalize_url(url: str) -> str:
     except Exception:
         return url
 
+def _parse_iso(s: str) -> datetime:
+    try:
+        return dtparser.parse(s).astimezone(timezone.utc)
+    except Exception:
+        return datetime.min.replace(tzinfo=timezone.utc)
+
 
 # ──────────────────────────────────────────────────────────
 # RSS FETCHING
 # ──────────────────────────────────────────────────────────
 
 def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
-    """
-    Fetch all articles from all RSS feeds within the time window.
-    Returns (articles, total_scanned).
-    Each article: {"title": str, "url": str, "source": str, "text": str}
-    where text = title + " " + summary (for richer matching).
-    """
     now    = datetime.now(timezone.utc)
     cutoff = now - timedelta(hours=window_hours)
 
@@ -337,9 +424,8 @@ def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
                 continue
 
             seen_urls.add(link)
-            summary = (e.get("summary") or e.get("description") or "")
-            # strip HTML tags from summary
-            summary = re.sub(r"<[^>]+>", " ", summary)
+            summary = re.sub(r"<[^>]+>", " ",
+                             e.get("summary") or e.get("description") or "")
             combined = f"{title} {summary}"
 
             articles.append({
@@ -356,22 +442,31 @@ def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
 # MENTION COUNTING
 # ──────────────────────────────────────────────────────────
 
-def count_mentions(articles: List[dict]) -> Dict[str, int]:
+def count_mentions(articles: List[dict]) -> Dict[str, float]:
     """
-    For each country, count how many UNIQUE articles mention it
-    (an article counts once per country even if the country appears multiple times).
-    """
-    counts: Dict[str, int] = {c["country"]: 0 for c in COUNTRIES}
+    Count weighted article mentions per country.
 
+    A mention from a source that is 'home' to that country
+    (e.g. BBC mentioning United Kingdom, CBC mentioning Canada)
+    counts as HOME_SOURCE_WEIGHT (0.25) rather than 1.0 to
+    reduce ambient domestic-coverage bias.  All other mentions
+    count as 1.0.  Final counts are rounded to 2 decimal places
+    so the JSON stays readable; downstream z-score math uses floats.
+    """
+    counts: Dict[str, float] = {c["country"]: 0.0 for c in COUNTRIES}
     for art in articles:
-        text = art["text"]
+        text       = art["text"]
+        source     = art.get("source", "")
+        home_cntry = SOURCE_HOME_COUNTRY.get(source)   # None for US sources
+
         for c in COUNTRIES:
-            name = c["country"]
+            name    = c["country"]
             aliases = COUNTRY_ALIASES.get(name, [name.lower()])
             for alias in aliases:
                 if alias in text:
-                    counts[name] += 1
-                    break   # count this article once per country
+                    weight = HOME_SOURCE_WEIGHT if (home_cntry == name) else 1.0
+                    counts[name] = round(counts[name] + weight, 2)
+                    break
 
     return counts
 
@@ -383,11 +478,11 @@ def count_mentions(articles: List[dict]) -> Dict[str, int]:
 def _mean_std(values: List[float]) -> Tuple[float, float]:
     if not values:
         return 0.0, 0.0
-    n   = len(values)
-    mu  = sum(values) / n
+    n  = len(values)
+    mu = sum(values) / n
     if n < 2:
         return mu, 0.0
-    var = sum((x - mu) ** 2 for x in values) / (n - 1)   # sample std
+    var = sum((x - mu) ** 2 for x in values) / (n - 1)
     return mu, math.sqrt(var)
 
 def compute_trend_status(z: float) -> str:
@@ -399,93 +494,98 @@ def compute_trend_status(z: float) -> str:
         return "low"
     return "normal"
 
-def analyze(current_counts: Dict[str, int],
+def _cold_start_z(country: str, current: float,
+                  all_counts: Dict[str, float]) -> Tuple[float, float, float, str]:
+    """
+    Hybrid z-score for when there is insufficient run history.
+
+    Combines two signals:
+      1. Seed baseline z — how far above the country's typical quiet-day level?
+      2. Relative z     — how far above THIS run's mean across all countries?
+
+    Takes the HIGHER of the two, so a country that is both way above its own
+    typical level AND dominating the current cycle (e.g. Iran during a war)
+    gets the full signal.
+
+    Returns (z, baseline_mean, baseline_std, method_label)
+    """
+    # Signal 1: against per-country seed baseline
+    seed_mean = SEED_BASELINE.get(country, 3.0)
+    seed_std  = _seed_std(seed_mean)
+    seed_z    = (current - seed_mean) / seed_std
+
+    # Signal 2: relative within current run distribution
+    run_values = [float(v) for v in all_counts.values()]
+    run_mean, run_std = _mean_std(run_values)
+    rel_z = (current - run_mean) / run_std if run_std > 0 else 0.0
+
+    z = max(seed_z, rel_z)
+    return z, seed_mean, seed_std, "cold_start_hybrid"
+
+
+def analyze(current_counts: Dict[str, float],
             existing_data: dict,
             window_end: datetime) -> List[dict]:
-    """
-    For each country:
-      1. Load its history from existing_data (if any).
-      2. Compute rolling baseline (mean, std) from last 7 days of history points.
-      3. Compute z-score for current count.
-      4. Append current count to history.
-      5. Prune history older than HISTORY_DAYS days.
-    """
     existing_map: Dict[str, dict] = {}
     for c in existing_data.get("countries", []):
         existing_map[c["country"]] = c
 
     results: List[dict] = []
-    cutoff_history = window_end - timedelta(days=HISTORY_DAYS)
+    cutoff_history  = window_end - timedelta(days=HISTORY_DAYS)
     baseline_cutoff = window_end - timedelta(days=7)
 
     for c in COUNTRIES:
-        name = c["country"]
-        iso2 = c["iso2"]
+        name    = c["country"]
+        iso2    = c["iso2"]
         current = current_counts.get(name, 0)
 
-        # ── history ───────────────────────────────────────────
-        old = existing_map.get(name, {})
-        history: List[dict] = old.get("history", [])
+        old     = existing_map.get(name, {})
+        history = old.get("history", [])
+        history = [h for h in history
+                   if _parse_iso(h.get("window_end", "")) >= cutoff_history]
 
-        # prune old entries
-        history = [
-            h for h in history
-            if _parse_iso(h.get("window_end", "")) >= cutoff_history
-        ]
-
-        # ── baseline: last 7 days of history points ───────────
         baseline_values = [
             float(h["mentions"])
             for h in history
             if _parse_iso(h.get("window_end", "")) >= baseline_cutoff
         ]
 
-        mu, sigma = _mean_std(baseline_values)
+        mu, sigma  = _mean_std(baseline_values)
+        baseline_n = len(baseline_values)
+        method     = "rolling_7d"
 
-        if len(baseline_values) >= BASELINE_MIN_RUNS and sigma > 0:
-            z = (current - mu) / sigma
-        elif len(baseline_values) >= BASELINE_MIN_RUNS:
-            # sigma == 0: all baseline values identical
-            z = 0.0 if current == mu else (2.5 if current > mu else -2.5)
+        if baseline_n >= BASELINE_MIN_RUNS:
+            if sigma > 0:
+                z = (current - mu) / sigma
+            else:
+                z = 0.0 if current == mu else (2.5 if current > mu else -2.5)
         else:
-            # not enough history yet — treat as normal
-            z = 0.0
+            z, mu, sigma, method = _cold_start_z(name, current, current_counts)
 
         trend_status = compute_trend_status(z)
+        pct_change   = (round((current - mu) / mu * 100, 1) if mu > 0 else None)
 
-        pct_change = (
-            round((current - mu) / mu * 100, 1)
-            if mu > 0 else None
-        )
-
-        # ── append current window to history ──────────────────
         history.append({
             "window_end": window_end.isoformat().replace("+00:00", "Z"),
             "mentions":   current,
         })
 
         results.append({
-            "country":       name,
-            "iso2":          iso2,
-            "mentions":      current,
-            "baseline_mean": round(mu, 2),
-            "baseline_std":  round(sigma, 2),
-            "baseline_n":    len(baseline_values),
-            "z_score":       round(z, 3),
-            "trend_status":  trend_status,
-            "pct_change":    pct_change,
-            "history":       history,
+            "country":          name,
+            "iso2":             iso2,
+            "mentions":         round(current, 2),   # weighted (home-source bias corrected)
+            "baseline_mean":    round(mu, 2),
+            "baseline_std":     round(sigma, 2),
+            "baseline_n":       baseline_n,
+            "baseline_method":  method,
+            "z_score":          round(z, 3),
+            "trend_status":     trend_status,
+            "pct_change":       pct_change,
+            "history":          history,
         })
 
-    # sort by current mentions descending for easy reading
     results.sort(key=lambda x: x["mentions"], reverse=True)
     return results
-
-def _parse_iso(s: str) -> datetime:
-    try:
-        return dtparser.parse(s).astimezone(timezone.utc)
-    except Exception:
-        return datetime.min.replace(tzinfo=timezone.utc)
 
 
 # ──────────────────────────────────────────────────────────
@@ -493,23 +593,22 @@ def _parse_iso(s: str) -> datetime:
 # ──────────────────────────────────────────────────────────
 
 def main():
-    now        = datetime.now(timezone.utc)
-    window_end = now
+    now          = datetime.now(timezone.utc)
+    window_end   = now
     window_start = now - timedelta(hours=WINDOW_HOURS)
 
-    print(f"🔍 Scanning articles from {window_start.isoformat()} → {window_end.isoformat()}")
+    print(f"🔍 Scanning {window_start.isoformat()} → {window_end.isoformat()}")
 
-    # ── load existing JSON (for history) ──────────────────────
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     existing_data: dict = {}
     if OUTPUT_FILE.exists():
         try:
             existing_data = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
-            print(f"📂 Loaded existing data ({len(existing_data.get('countries', []))} countries in history)")
+            n = len(existing_data.get("countries", []))
+            print(f"📂 Loaded existing data ({n} countries in history)")
         except Exception as e:
             print(f"⚠  Could not parse existing JSON: {e}")
 
-    # ── fetch & count ──────────────────────────────────────────
     print("📡 Fetching RSS feeds…")
     articles, total_scanned = fetch_articles(WINDOW_HOURS)
     print(f"   → {len(articles)} unique articles in window (scanned {total_scanned} entries)")
@@ -517,29 +616,29 @@ def main():
     print("🔢 Counting country mentions…")
     counts = count_mentions(articles)
 
-    # quick summary
     top = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:10]
     for name, n in top:
         print(f"   {n:4d}  {name}")
 
-    # ── statistical analysis + history update ─────────────────
     print("📊 Computing z-scores and trend status…")
     country_results = analyze(counts, existing_data, window_end)
 
     trending = [c for c in country_results if c["trend_status"] == "trending"]
+    elevated = [c for c in country_results if c["trend_status"] == "elevated"]
     if trending:
-        print(f"🔥 Trending: {', '.join(c['country'] for c in trending)}")
+        print(f"🔥 Trending:  {', '.join(c['country'] for c in trending)}")
+    if elevated:
+        print(f"📈 Elevated:  {', '.join(c['country'] for c in elevated)}")
 
-    # ── assemble final JSON ────────────────────────────────────
     output = {
         "meta": {
-            "generated_at":    window_end.isoformat().replace("+00:00", "Z"),
-            "window_start":    window_start.isoformat().replace("+00:00", "Z"),
-            "window_end":      window_end.isoformat().replace("+00:00", "Z"),
-            "window_hours":    WINDOW_HOURS,
-            "articles_scanned": total_scanned,
-            "articles_in_window": len(articles),
-            "sources_count":   len(RSS_SOURCES),
+            "generated_at":         window_end.isoformat().replace("+00:00", "Z"),
+            "window_start":         window_start.isoformat().replace("+00:00", "Z"),
+            "window_end":           window_end.isoformat().replace("+00:00", "Z"),
+            "window_hours":         WINDOW_HOURS,
+            "articles_scanned":     total_scanned,
+            "articles_in_window":   len(articles),
+            "sources_count":        len(RSS_SOURCES),
             "trending_threshold_z": TRENDING_Z,
             "elevated_threshold_z": ELEVATED_Z,
         },
