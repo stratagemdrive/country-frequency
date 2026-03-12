@@ -618,7 +618,7 @@ def main():
 
     top = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:10]
     for name, n in top:
-        print(f"   {n:4d}  {name}")
+        print(f"   {n:6.1f}  {name}")
 
     print("📊 Computing z-scores and trend status…")
     country_results = analyze(counts, existing_data, window_end)
