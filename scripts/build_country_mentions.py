@@ -17,7 +17,7 @@ JSON shape (Base44-friendly):
       "baseline_mean":    31.4,
       "baseline_std":     6.2,
       "baseline_n":       14,
-      "baseline_method":  "rolling_7d",
+      "baseline_method":  method,
       "z_score":          1.71,
       "trend_status":     "trending",   // "trending" | "elevated" | "normal" | "low"
       "pct_change":       33.8,
@@ -65,7 +65,10 @@ from dateutil import parser as dtparser
 
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
-BASELINE_MIN_RUNS = 3      # history points needed before full z-score kicks in
+BASELINE_MIN_RUNS = 7      # history points needed before full rolling baseline kicks in
+BASELINE_DAYS     = 30     # how far back the baseline window looks
+BASELINE_RECENCY_EXCLUDE_DAYS = 3   # exclude the most recent N days from baseline
+                                    # so an ongoing event doesn't erase its own signal
 TRENDING_Z        = 2.0
 ELEVATED_Z        = 1.0
 LOW_Z             = -1.0
@@ -603,8 +606,9 @@ def analyze(current_counts: Dict[str, float],
         existing_map[c["country"]] = c
 
     results: List[dict] = []
-    cutoff_history  = window_end - timedelta(days=HISTORY_DAYS)
-    baseline_cutoff = window_end - timedelta(days=7)
+    cutoff_history        = window_end - timedelta(days=HISTORY_DAYS)
+    baseline_window_start = window_end - timedelta(days=BASELINE_DAYS)
+    recency_cutoff        = window_end - timedelta(days=BASELINE_RECENCY_EXCLUDE_DAYS)
 
     for c in COUNTRIES:
         name    = c["country"]
@@ -616,21 +620,32 @@ def analyze(current_counts: Dict[str, float],
         history = [h for h in history
                    if _parse_iso(h.get("window_end", "")) >= cutoff_history]
 
+        # Baseline = runs from 30 days ago up to 3 days ago.
+        # Excluding the most recent 3 days prevents an ongoing news event
+        # from normalising itself into the baseline and collapsing its own z-score.
         baseline_values = [
             float(h["mentions"])
             for h in history
-            if _parse_iso(h.get("window_end", "")) >= baseline_cutoff
+            if baseline_window_start
+               <= _parse_iso(h.get("window_end", ""))
+               < recency_cutoff
         ]
 
         mu, sigma  = _mean_std(baseline_values)
         baseline_n = len(baseline_values)
-        method     = "rolling_7d"
+        method     = "rolling_30d_excl3"
 
         if baseline_n >= BASELINE_MIN_RUNS:
             if sigma > 0:
                 z = (current - mu) / sigma
             else:
-                z = 0.0 if current == mu else (2.5 if current > mu else -2.5)
+                # std=0 means all baseline values were identical.
+                # Use a floor std of max(1.5, 20% of mean) so that small
+                # integer wobbles on low-volume countries don't falsely trend.
+                # e.g. Somalia 0→1 with mean=0: floor_std=1.5, z=0.67 (normal)
+                #      Germany 1→6 with mean=1: floor_std=1.5, z=3.3 (trending - real)
+                floor_std = max(1.5, mu * 0.20)
+                z = (current - mu) / floor_std
         else:
             z, mu, sigma, method = _cold_start_z(name, current, current_counts)
 
