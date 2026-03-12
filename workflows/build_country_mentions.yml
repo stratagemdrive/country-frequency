@@ -1,0 +1,59 @@
+name: Build country_mentions.json
+
+on:
+  schedule:
+    # Runs every 12 hours: midnight and noon UTC
+    - cron: "0 0,12 * * *"
+  workflow_dispatch:   # manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history so we always have the latest country_mentions.json
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Debug – show repo structure
+        run: |
+          pwd
+          ls -la
+          echo "---- scripts ----"
+          ls -la scripts || true
+          echo "---- public ----"
+          ls -la public || true
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build country_mentions.json
+        run: |
+          python scripts/build_country_mentions.py
+
+      - name: Copy to docs/ for GitHub Pages
+        run: |
+          mkdir -p docs
+          cp public/country_mentions.json docs/country_mentions.json
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/country_mentions.json docs/country_mentions.json
+          git diff --cached --quiet || git commit -m "chore: update country_mentions.json [$(date -u +'%Y-%m-%d %H:%M UTC')]"
+          # Rebase on top of any concurrent push, then push
+          git pull --rebase origin main
+          git push origin main
