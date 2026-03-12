@@ -126,51 +126,55 @@ SOURCE_HOME_COUNTRY: Dict[str, str] = {
 # detection works immediately without waiting for history to build.
 # Std is set to 40% of mean (reasonable for news counts).
 
+# ── Seed baselines reflect city-expanded aliases ──────────
+# Counts are expected weighted mentions per 24h window across ~500 articles.
+# Values are higher than the pre-city baseline to account for major-city
+# coverage that now rolls up to the country count.
 SEED_BASELINE: Dict[str, float] = {
-    "Russia":         30.0,
-    "China":          25.0,
-    "Ukraine":        28.0,
-    "Israel":         22.0,
-    "Palestine":       8.0,
-    "Iran":           12.0,
-    "United Kingdom": 18.0,
-    "Germany":        10.0,
-    "France":          9.0,
-    "India":          10.0,
-    "Pakistan":        6.0,
-    "North Korea":     5.0,
-    "South Korea":     5.0,
-    "Japan":           7.0,
-    "Taiwan":          6.0,
-    "Syria":           5.0,
-    "Turkey":          6.0,
-    "Saudi Arabia":    7.0,
-    "UAE":             5.0,
-    "Yemen":           5.0,
-    "Canada":          8.0,
-    "Mexico":          6.0,
-    "Brazil":          6.0,
-    "Colombia":        6.0,
-    "Venezuela":       5.0,
-    "Cuba":            4.0,
-    "Argentina":       5.0,
-    "Chile":           5.0,
-    "Peru":            4.0,
-    "Panama":          4.0,
-    "El Salvador":     4.0,
-    "Nigeria":         5.0,
-    "Sudan":           5.0,
-    "Somalia":         4.0,
-    "Libya":           4.0,
-    "Egypt":           5.0,
-    "Algeria":         4.0,
-    "Morocco":         4.0,
-    "Myanmar":         5.0,
-    "Indonesia":       5.0,
-    "Vietnam":         4.0,
-    "Armenia":         4.0,
-    "Azerbaijan":      4.0,
-    "Denmark":         5.0,
+    "Russia":         40.0,   # Moscow + SPb + others frequently cited
+    "China":          45.0,   # Beijing + Shanghai + many major cities
+    "Ukraine":        35.0,   # Kyiv + Kharkiv + Odesa + front-line cities
+    "Israel":         28.0,   # Jerusalem + Tel Aviv + Haifa
+    "Palestine":      14.0,   # Gaza + West Bank cities
+    "Iran":           18.0,   # Tehran + Mashhad + Isfahan
+    "United Kingdom": 28.0,   # London + Birmingham + Manchester etc.
+    "Germany":        16.0,   # Berlin + Hamburg + Munich + others
+    "France":         16.0,   # Paris + Marseille + Lyon etc.
+    "India":          22.0,   # New Delhi + Mumbai + Bangalore + many others
+    "Pakistan":       10.0,   # Islamabad + Karachi + Lahore
+    "North Korea":     6.0,   # Pyongyang only, rarely named by city
+    "South Korea":    10.0,   # Seoul + Busan + others
+    "Japan":          14.0,   # Tokyo + Osaka + others
+    "Taiwan":         10.0,   # Taipei + Kaohsiung + Taichung
+    "Syria":          10.0,   # Damascus + Aleppo + Homs etc.
+    "Turkey":         12.0,   # Ankara + Istanbul + others
+    "Saudi Arabia":   12.0,   # Riyadh + Jeddah + Mecca
+    "UAE":             8.0,   # Abu Dhabi + Dubai + Sharjah
+    "Yemen":           8.0,   # Sanaa + Aden + Hodeidah
+    "Canada":         14.0,   # Ottawa + Toronto + Montreal + Vancouver
+    "Mexico":         12.0,   # Mexico City + Guadalajara + Monterrey etc.
+    "Brazil":         14.0,   # Brasilia + Sao Paulo + Rio + others
+    "Colombia":       10.0,   # Bogota + Medellin + Cali + others
+    "Venezuela":       8.0,   # Caracas + Maracaibo + Valencia
+    "Cuba":            6.0,   # Havana + Santiago
+    "Argentina":      10.0,   # Buenos Aires + Cordoba + Rosario
+    "Chile":           8.0,   # Santiago + Valparaiso + Concepcion
+    "Peru":            7.0,   # Lima + Arequipa + others
+    "Panama":          6.0,   # Panama City + Canal
+    "El Salvador":     5.0,   # San Salvador; small country
+    "Nigeria":        10.0,   # Abuja + Lagos + Kano + others
+    "Sudan":           8.0,   # Khartoum + Omdurman + Darfur
+    "Somalia":         6.0,   # Mogadishu; al-Shabaab coverage
+    "Libya":           7.0,   # Tripoli + Benghazi + Misrata
+    "Egypt":          10.0,   # Cairo + Alexandria + others
+    "Algeria":         6.0,   # Algiers + Oran + Constantine
+    "Morocco":         7.0,   # Rabat + Casablanca + Marrakech
+    "Myanmar":         8.0,   # Naypyidaw + Yangon + Mandalay
+    "Indonesia":       9.0,   # Jakarta + Surabaya + others
+    "Vietnam":         7.0,   # Hanoi + Ho Chi Minh City + others
+    "Armenia":         5.0,   # Yerevan; small country
+    "Azerbaijan":      5.0,   # Baku + Ganja
+    "Denmark":         7.0,   # Copenhagen + Greenland coverage
 }
 
 def _seed_std(mean: float) -> float:
@@ -273,55 +277,123 @@ COUNTRIES = [
 ]
 
 COUNTRY_ALIASES: Dict[str, List[str]] = {
-    "Russia":         ["russia", "russian", "russians", "moscow", "kremlin", "putin"],
-    "India":          ["india", "indian", "indians", "new delhi", "modi"],
-    "Pakistan":       ["pakistan", "pakistani", "pakistanis", "islamabad"],
-    "China":          ["china", "chinese", "beijing", "xi jinping", "prc"],
+    # Aliases include: country name/demonyms, capital city, major cities (pop >1M),
+    # and key political figures / organisations.
+    "Russia":         ["russia", "russian", "russians", "moscow", "kremlin", "putin",
+                       "saint petersburg", "st. petersburg", "novosibirsk", "yekaterinburg",
+                       "nizhny novgorod", "kazan", "chelyabinsk", "omsk", "samara", "rostov"],
+    "India":          ["india", "indian", "indians", "new delhi", "modi",
+                       "mumbai", "delhi", "bangalore", "bengaluru", "hyderabad", "ahmedabad",
+                       "chennai", "kolkata", "surat", "pune", "jaipur", "lucknow",
+                       "kanpur", "nagpur", "patna", "indore", "vadodara", "bhopal"],
+    "Pakistan":       ["pakistan", "pakistani", "pakistanis", "islamabad",
+                       "karachi", "lahore", "faisalabad", "rawalpindi", "gujranwala",
+                       "peshawar", "multan", "hyderabad sind", "quetta"],
+    "China":          ["china", "chinese", "beijing", "xi jinping", "prc",
+                       "shanghai", "guangzhou", "shenzhen", "chengdu", "chongqing",
+                       "tianjin", "wuhan", "dongguan", "nanjing", "hangzhou",
+                       "xi'an", "shenyang", "harbin", "qingdao", "zhengzhou",
+                       "foshan", "dalian", "kunming", "changsha"],
     "United Kingdom": ["united kingdom", "britain", "british", "england", "english",
-                       "london", "uk ", " uk,", "sunak", "starmer"],
-    "Germany":        ["germany", "german", "germans", "berlin", "bundestag", "scholz"],
-    "UAE":            ["uae", "united arab emirates", "abu dhabi", "dubai", "emirati"],
-    "Saudi Arabia":   ["saudi arabia", "saudi", "saudis", "riyadh", "mbs", "aramco"],
+                       "london", "uk ", " uk,", "sunak", "starmer",
+                       "birmingham", "manchester", "leeds", "glasgow", "liverpool",
+                       "sheffield", "edinburgh", "bristol", "cardiff"],
+    "Germany":        ["germany", "german", "germans", "berlin", "bundestag", "scholz",
+                       "hamburg", "munich", "cologne", "frankfurt", "stuttgart",
+                       "dusseldorf", "dortmund", "essen", "leipzig", "bremen"],
+    "UAE":            ["uae", "united arab emirates", "abu dhabi", "dubai", "emirati",
+                       "sharjah"],
+    "Saudi Arabia":   ["saudi arabia", "saudi", "saudis", "riyadh", "mbs", "aramco",
+                       "jeddah", "mecca", "medina"],
     "Israel":         ["israel", "israeli", "israelis", "jerusalem", "tel aviv",
-                       "idf", "netanyahu"],
+                       "idf", "netanyahu", "haifa", "rishon lezion", "petah tikva",
+                       "ashdod", "beersheba"],
     "Palestine":      ["palestine", "palestinian", "palestinians", "gaza", "west bank",
-                       "hamas", "ramallah"],
-    "Mexico":         ["mexico", "mexican", "mexicans", "mexico city", "sheinbaum"],
-    "Brazil":         ["brazil", "brazilian", "brazilians", "brasilia", "lula"],
-    "Canada":         ["canada", "canadian", "canadians", "ottawa", "trudeau", "carney"],
-    "Nigeria":        ["nigeria", "nigerian", "nigerians", "abuja", "lagos"],
-    "Japan":          ["japan", "japanese", "tokyo", "kishida", "ishiba"],
+                       "hamas", "ramallah", "nablus", "jenin", "hebron"],
+    "Mexico":         ["mexico", "mexican", "mexicans", "mexico city", "sheinbaum",
+                       "guadalajara", "monterrey", "puebla", "tijuana", "leon",
+                       "juarez", "ciudad juarez", "zapopan", "nezahualcoyotl"],
+    "Brazil":         ["brazil", "brazilian", "brazilians", "brasilia", "lula",
+                       "sao paulo", "são paulo", "rio de janeiro", "salvador",
+                       "fortaleza", "belo horizonte", "manaus", "curitiba", "recife",
+                       "porto alegre", "goiania", "belem", "guarulhos", "campinas"],
+    "Canada":         ["canada", "canadian", "canadians", "ottawa", "trudeau", "carney",
+                       "toronto", "montreal", "vancouver", "calgary", "edmonton",
+                       "winnipeg", "quebec city"],
+    "Nigeria":        ["nigeria", "nigerian", "nigerians", "abuja", "lagos",
+                       "kano", "ibadan", "kaduna", "port harcourt", "benin city",
+                       "maiduguri", "zaria", "aba", "jos", "ilorin"],
+    "Japan":          ["japan", "japanese", "tokyo", "kishida", "ishiba",
+                       "osaka", "nagoya", "sapporo", "fukuoka", "kobe", "kawasaki",
+                       "kyoto", "saitama", "hiroshima"],
     "Iran":           ["iran", "iranian", "iranians", "tehran", "khamenei",
-                       "irgc", "rouhani", "raisi", "pezeshkian", "hormuz"],
-    "Syria":          ["syria", "syrian", "syrians", "damascus", "al-sharaa", "hts"],
-    "France":         ["france", "french", "paris", "macron", "elysee"],
-    "Turkey":         ["turkey", "turkish", "ankara", "erdogan", "istanbul"],
-    "Venezuela":      ["venezuela", "venezuelan", "venezuelans", "caracas", "maduro"],
-    "Vietnam":        ["vietnam", "vietnamese", "hanoi"],
-    "Taiwan":         ["taiwan", "taiwanese", "taipei"],
-    "South Korea":    ["south korea", "south korean", "seoul"],
+                       "irgc", "rouhani", "raisi", "pezeshkian", "hormuz",
+                       "mashhad", "isfahan", "karaj", "tabriz", "shiraz",
+                       "ahvaz", "qom", "kermanshah"],
+    "Syria":          ["syria", "syrian", "syrians", "damascus", "al-sharaa", "hts",
+                       "aleppo", "homs", "latakia", "hama", "deir ez-zor", "raqqa"],
+    "France":         ["france", "french", "paris", "macron", "elysee",
+                       "marseille", "lyon", "toulouse", "nice", "nantes",
+                       "montpellier", "strasbourg", "bordeaux", "lille"],
+    "Turkey":         ["turkey", "turkish", "ankara", "erdogan", "istanbul",
+                       "izmir", "bursa", "adana", "gaziantep", "konya",
+                       "mersin", "diyarbakir", "kayseri"],
+    "Venezuela":      ["venezuela", "venezuelan", "venezuelans", "caracas", "maduro",
+                       "maracaibo", "valencia", "barquisimeto", "maracay"],
+    "Vietnam":        ["vietnam", "vietnamese", "hanoi",
+                       "ho chi minh city", "saigon", "hai phong", "da nang", "bien hoa",
+                       "can tho", "hue"],
+    "Taiwan":         ["taiwan", "taiwanese", "taipei",
+                       "kaohsiung", "taichung", "tainan", "taoyuan"],
+    "South Korea":    ["south korea", "south korean", "seoul",
+                       "busan", "incheon", "daegu", "daejeon", "gwangju", "suwon",
+                       "ulsan"],
     "North Korea":    ["north korea", "north korean", "pyongyang", "kim jong"],
-    "Indonesia":      ["indonesia", "indonesian", "jakarta", "prabowo"],
-    "Myanmar":        ["myanmar", "burmese", "naypyidaw", "tatmadaw", "burma"],
+    "Indonesia":      ["indonesia", "indonesian", "jakarta", "prabowo",
+                       "surabaya", "bandung", "medan", "bekasi", "tangerang",
+                       "depok", "semarang", "palembang", "makassar", "south tangerang",
+                       "batam", "pekanbaru", "bandar lampung", "malang"],
+    "Myanmar":        ["myanmar", "burmese", "naypyidaw", "tatmadaw", "burma",
+                       "yangon", "mandalay"],
     "Armenia":        ["armenia", "armenian", "armenians", "yerevan"],
-    "Azerbaijan":     ["azerbaijan", "azerbaijani", "baku", "aliyev"],
-    "Morocco":        ["morocco", "moroccan", "moroccans", "rabat"],
+    "Azerbaijan":     ["azerbaijan", "azerbaijani", "baku", "aliyev",
+                       "ganja", "sumqayit"],
+    "Morocco":        ["morocco", "moroccan", "moroccans", "rabat",
+                       "casablanca", "fez", "marrakech", "tangier", "agadir",
+                       "meknes", "oujda"],
     "Somalia":        ["somalia", "somali", "somalis", "mogadishu", "al-shabaab"],
-    "Yemen":          ["yemen", "yemeni", "yemenis", "sanaa", "houthis", "houthi"],
-    "Libya":          ["libya", "libyan", "libyans", "tripoli", "benghazi"],
-    "Egypt":          ["egypt", "egyptian", "egyptians", "cairo", "sisi"],
-    "Algeria":        ["algeria", "algerian", "algerians", "algiers"],
-    "Argentina":      ["argentina", "argentinian", "argentinians", "buenos aires", "milei"],
-    "Chile":          ["chile", "chilean", "chileans", "santiago"],
-    "Peru":           ["peru", "peruvian", "peruvians", "lima"],
-    "Cuba":           ["cuba", "cuban", "cubans", "havana"],
-    "Colombia":       ["colombia", "colombian", "colombians", "bogota", "petro"],
-    "Panama":         ["panama", "panamanian", "panamanians", "panama city", "panama canal"],
+    "Yemen":          ["yemen", "yemeni", "yemenis", "sanaa", "houthis", "houthi",
+                       "aden", "taiz", "hodeidah"],
+    "Libya":          ["libya", "libyan", "libyans", "tripoli", "benghazi",
+                       "misrata", "tobruk"],
+    "Egypt":          ["egypt", "egyptian", "egyptians", "cairo", "sisi",
+                       "alexandria", "giza", "shubra el kheima", "port said",
+                       "suez", "luxor", "aswan"],
+    "Algeria":        ["algeria", "algerian", "algerians", "algiers",
+                       "oran", "constantine", "annaba", "blida", "batna"],
+    "Argentina":      ["argentina", "argentinian", "argentinians", "buenos aires", "milei",
+                       "cordoba", "rosario", "mendoza", "la plata", "san miguel de tucuman",
+                       "mar del plata", "quilmes", "salta"],
+    "Chile":          ["chile", "chilean", "chileans", "santiago",
+                       "valparaiso", "concepcion", "antofagasta"],
+    "Peru":           ["peru", "peruvian", "peruvians", "lima",
+                       "arequipa", "trujillo", "chiclayo", "callao", "iquitos"],
+    "Cuba":           ["cuba", "cuban", "cubans", "havana",
+                       "santiago de cuba", "camaguey", "holguin"],
+    "Colombia":       ["colombia", "colombian", "colombians", "bogota", "petro",
+                       "medellin", "cali", "barranquilla", "cartagena", "cucuta",
+                       "bucaramanga", "pereira"],
+    "Panama":         ["panama", "panamanian", "panamanians", "panama city", "panama canal",
+                       "colon"],
     "El Salvador":    ["el salvador", "salvadoran", "salvadorans", "san salvador", "bukele"],
-    "Denmark":        ["denmark", "danish", "danes", "copenhagen", "greenland"],
-    "Sudan":          ["sudan", "sudanese", "khartoum", "rsf", "darfur"],
+    "Denmark":        ["denmark", "danish", "danes", "copenhagen", "greenland",
+                       "aarhus", "odense", "aalborg"],
+    "Sudan":          ["sudan", "sudanese", "khartoum", "rsf", "darfur",
+                       "omdurman", "port sudan", "kassala"],
     "Ukraine":        ["ukraine", "ukrainian", "ukrainians", "kyiv", "kiev",
-                       "zelensky", "zelenskyy"],
+                       "zelensky", "zelenskyy",
+                       "kharkiv", "dnipro", "odessa", "odesa", "donetsk",
+                       "zaporizhzhia", "lviv", "kryvyi rih", "mykolaiv", "mariupol"],
 }
 
 
