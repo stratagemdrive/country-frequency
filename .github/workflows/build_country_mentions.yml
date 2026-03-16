@@ -3,7 +3,7 @@ name: Build country_mentions.json
 on:
   schedule:
     # Runs every 12 hours: midnight and noon UTC
-    - cron: "0 0,12 * * *"
+   - cron: "0 * * * *"   # every hour
   workflow_dispatch:   # manual trigger
 
 permissions:
