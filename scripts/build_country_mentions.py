@@ -65,7 +65,7 @@ from dateutil import parser as dtparser
 
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
-BASELINE_MIN_RUNS = 30     # history points needed before full rolling baseline kicks in
+BASELINE_MIN_RUNS = 360     # history points needed before full rolling baseline kicks in
                               # (~15 days of twice-daily runs)
 BASELINE_DAYS     = 30     # how far back the baseline window looks
 BASELINE_RECENCY_EXCLUDE_DAYS = 3   # exclude the most recent N days from baseline
