@@ -65,10 +65,13 @@ from dateutil import parser as dtparser
 
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
-BASELINE_MIN_RUNS = 14      # minimum baseline points to use rolling stats.
-                              # At hourly cadence, 14 points ≈ 2+ weeks of usable
-                              # baseline once the 3-day recency window is excluded.
-                              # Below this we fall back to cold_start_hybrid.
+BASELINE_MIN_RUNS = 100     # minimum baseline points to use rolling stats.
+                              # The baseline window is 30d minus the 3-day recency
+                              # exclusion = 27 usable days. At ~6-7 runs/day (observed
+                              # cadence), 100 points ≈ 15 days of usable history,
+                              # meaning rolling baseline kicks in ~18 days after a
+                              # country is first tracked. Below this we fall back to
+                              # cold_start_hybrid.
 BASELINE_DAYS     = 30     # how far back the baseline window looks
 BASELINE_RECENCY_EXCLUDE_DAYS = 3   # exclude the most recent N days from baseline
                                     # so an ongoing event doesn't erase its own signal
