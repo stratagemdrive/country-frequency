@@ -65,8 +65,10 @@ from dateutil import parser as dtparser
 
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
-BASELINE_MIN_RUNS = 360     # history points needed before full rolling baseline kicks in
-                              # (~15 days of twice-daily runs)
+BASELINE_MIN_RUNS = 14      # minimum baseline points to use rolling stats.
+                              # At hourly cadence, 14 points ≈ 2+ weeks of usable
+                              # baseline once the 3-day recency window is excluded.
+                              # Below this we fall back to cold_start_hybrid.
 BASELINE_DAYS     = 30     # how far back the baseline window looks
 BASELINE_RECENCY_EXCLUDE_DAYS = 3   # exclude the most recent N days from baseline
                                     # so an ongoing event doesn't erase its own signal
@@ -779,7 +781,7 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "udon thani", "phuket"],
     "Cambodia":       ["cambodia", "cambodian", "cambodians", "phnom penh",
                        "siem reap", "sihanoukville"],
-    "Laos":           ["laos", "laotian", "laotians", "lao", "vientiane",
+    "Laos":           ["laos", "laotian", "laotians", "lao pdr", "vientiane",
                        "luang prabang", "pakse"],
     "Bangladesh":     ["bangladesh", "bangladeshi", "bangladeshis", "dhaka",
                        "chittagong", "sylhet", "rajshahi", "khulna", "mymensingh"],
@@ -829,7 +831,7 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "agadez"],
     "Chad":           ["chad", "chadian", "chadians", "n'djamena",
                        "moundou", "sarh", "abeche"],
-    "Guinea":         ["guinea", "guinean", "guineans", "conakry",
+    "Guinea":         ["guinea conakry", "republic of guinea", "guinean", "guineans", "conakry",
                        "nzerekore", "kindia", "kankan"],
     "Angola":         ["angola", "angolan", "angolans", "luanda",
                        "huambo", "lobito", "benguela", "malanje"],
@@ -844,7 +846,7 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "nouadhibou"],
     "Liberia":        ["liberia", "liberian", "liberians", "monrovia"],
     "Sierra Leone":   ["sierra leone", "sierra leonean", "freetown",
-                       "bo", "kenema"],
+                       "kenema", "makeni"],
     "Gabon":          ["gabon", "gabonese", "libreville", "port-gentil"],
     "Congo":          ["republic of the congo", "congo brazzaville",
                        "brazzaville", "pointe-noire"],
@@ -895,11 +897,47 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
 }
 
 
+# Aliases that are short or common enough to produce false positives if matched as
+# plain substrings.  These get word-boundary matching instead.
+# Any alias ≤ 4 chars, or a known ambiguous word, should be listed here.
+_WORD_BOUNDARY_ALIASES: set = {
+    # Laos — "lao pdr" is used now but keep "lao" here as safety for any future re-add
+    "lao",
+    # DRC abbreviation — could appear inside other acronyms
+    "drc",
+    # M23 rebel group — could match e.g. "m230"
+    "m23",
+    # "niger" is a strict substring of "nigeria" / "nigerian" — must use word boundary
+    # so Nigerian articles don't inflate Niger's count
+    "niger",
+    # "mali" is inside "somalia" / "somali"
+    "mali",
+    # "chad" is a common English first name
+    "chad",
+    # "uk" — already padded in aliases ("uk ", " uk,") but keep here as guard
+    "uk",
+}
+
+
+def _alias_matches(alias: str, text: str) -> bool:
+    """
+    Return True if alias appears in text.
+
+    Short / ambiguous aliases use word-boundary matching via regex so that
+    e.g. "bo" doesn't match inside "about" or "robot", and "niger" doesn't
+    match inside "nigeria" / "nigerian".
+    """
+    if alias in _WORD_BOUNDARY_ALIASES:
+        # \b is a word boundary — zero-width assertion between \w and \W
+        return bool(re.search(r'\b' + re.escape(alias) + r'\b', text))
+    return alias in text
+
+
+
 # ──────────────────────────────────────────────────────────
 # HELPERS
 # ──────────────────────────────────────────────────────────
 
-def _norm(s: str) -> str:
     return " ".join((s or "").lower().split())
 
 def fetch_text(url: str) -> Optional[str]:
@@ -1033,7 +1071,7 @@ def count_mentions(articles: List[dict]) -> Dict[str, float]:
             name    = c["country"]
             aliases = COUNTRY_ALIASES.get(name, [name.lower()])
             for alias in aliases:
-                if alias in text:
+                if _alias_matches(alias, text):
                     weight = HOME_SOURCE_WEIGHT if (home_cntry == name) else 1.0
                     counts[name] = round(counts[name] + weight, 2)
                     break
