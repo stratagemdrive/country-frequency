@@ -2,7 +2,7 @@
 build_country_mentions.py
 =========================
 Scans 30 credible US/UK/CA news sources via RSS for a 24-hour window,
-counts how many articles mention each of 44 tracked countries,
+counts how many articles mention each tracked country,
 compares against a rolling 7-day baseline, computes z-scores,
 flags trending countries, and writes public/country_mentions.json.
 
@@ -128,71 +128,187 @@ SOURCE_HOME_COUNTRY: Dict[str, str] = {
 # across ~500 articles from 30 sources in a 24h window.
 # Used as the baseline on run #1 (cold start) so trending
 # detection works immediately without waiting for history to build.
-# Std is set to 40% of mean (reasonable for news counts).
+# Std is set to 40-60% of mean (reasonable for news counts).
 
-# ── Seed baselines reflect city-expanded aliases ──────────
-# Counts are expected weighted mentions per 24h window across ~500 articles.
-# Values are higher than the pre-city baseline to account for major-city
-# coverage that now rolls up to the country count.
-# Seed baselines = expected mention counts on a QUIET news day.
-# Calibrated against observed real RSS data (city-expanded aliases, ~500 articles/day).
-# These stay active for the first 30 runs (~15 days); after that the
-# rolling 30-day window takes over entirely.
-#
-# Key calibration anchors from observed data (today is an Iran/Israel spike day):
-#   Russia ~26, Ukraine ~17, China ~19, UK ~12-26, France ~7-9,
-#   Canada ~4-7, India ~8, Syria ~17 (currently elevated), Israel ~40-47 (spike)
-# Quiet-day estimates set ~20-30% below current observed where war/conflict
-# is clearly inflating counts right now.
 SEED_BASELINE: Dict[str, float] = {
-    "Russia":         25.0,   # Moscow + SPb; consistent war-adjacent coverage
-    "China":          20.0,   # Beijing + Shanghai + cities; trade/geopolitics staple
-    "Ukraine":        20.0,   # Kyiv + front-line cities; ongoing war baseline
-    "Israel":         15.0,   # Jerusalem + Tel Aviv; quiet-day estimate (currently spiked)
-    "Palestine":       8.0,   # Gaza + West Bank; currently quiet relative to Israel
-    "Iran":           15.0,   # Tehran + cities; currently massively spiked, seed = quiet
-    "United Kingdom": 15.0,   # London + cities; home-source weighted down
-    "Germany":         8.0,   # Berlin + cities; observed ~1-6 today
-    "France":          8.0,   # Paris + cities; observed ~6-9 today
-    "India":           8.0,   # Observed consistently ~8; cities add little extra
-    "Pakistan":        5.0,   # Karachi + Lahore; sporadically covered
-    "North Korea":     5.0,   # Pyongyang; steady low-level coverage
-    "South Korea":     6.0,   # Seoul + Busan; tech/politics coverage
-    "Japan":           8.0,   # Tokyo + Osaka; consistent coverage
-    "Taiwan":          6.0,   # Taipei; China-tension driven
-    "Syria":           6.0,   # Damascus + Aleppo; quiet-day estimate (currently elevated)
-    "Turkey":          6.0,   # Istanbul + Ankara; moderate steady coverage
-    "Saudi Arabia":    5.0,   # Riyadh + Jeddah; observed ~1-2 today, seed more generous
-    "UAE":             5.0,   # Dubai + Abu Dhabi; observed ~6-7 today
-    "Yemen":           4.0,   # Sanaa + Aden; Houthi coverage, sporadic
-    "Canada":          6.0,   # Ottawa + Toronto + Vancouver; home-source weighted
-    "Mexico":          5.0,   # Mexico City + others; observed ~2-3 today
-    "Brazil":          6.0,   # Sao Paulo + Rio; observed ~2-3 today, cities should help
-    "Colombia":        6.0,   # Bogota + Medellin; observed 7-19 (possible spike today)
-    "Venezuela":       4.0,   # Caracas; observed ~2-3
-    "Cuba":            3.0,   # Havana; observed ~1
-    "Argentina":       5.0,   # Buenos Aires; sporadic Milei/economy coverage
-    "Chile":           4.0,   # Santiago; observed ~1-3
-    "Peru":            3.0,   # Lima; low coverage
-    "Panama":          3.0,   # Panama City/Canal; Trump rhetoric drives spikes
-    "El Salvador":     3.0,   # San Salvador; Bukele coverage
-    "Nigeria":         5.0,   # Lagos + Abuja; observed 0-18 (spike today)
-    "Sudan":           4.0,   # Khartoum + Darfur; ongoing conflict, sporadic
-    "Somalia":         3.0,   # Mogadishu; al-Shabaab coverage, sporadic
-    "Libya":           3.0,   # Tripoli + Benghazi; low steady coverage
-    "Egypt":           5.0,   # Cairo + Alexandria; regional hub coverage
-    "Algeria":         3.0,   # Algiers; low coverage
-    "Morocco":         4.0,   # Casablanca + Rabat; moderate coverage
-    "Myanmar":         4.0,   # Yangon; civil war coverage, sporadic
-    "Indonesia":       4.0,   # Jakarta; large country, underreported in Western press
-    "Vietnam":         3.0,   # Ho Chi Minh + Hanoi; low Western coverage
-    "Armenia":         3.0,   # Yerevan; post-Karabakh, sporadic
-    "Azerbaijan":      3.0,   # Baku; post-Karabakh, sporadic
-    "Denmark":         5.0,   # Copenhagen + Greenland; elevated due to Trump/Greenland
+    # ── Original 44 ──────────────────────────────────────
+    "Russia":         25.0,
+    "China":          20.0,
+    "Ukraine":        20.0,
+    "Israel":         15.0,
+    "Palestine":       8.0,
+    "Iran":           15.0,
+    "United Kingdom": 15.0,
+    "Germany":         8.0,
+    "France":          8.0,
+    "India":           8.0,
+    "Pakistan":        5.0,
+    "North Korea":     5.0,
+    "South Korea":     6.0,
+    "Japan":           8.0,
+    "Taiwan":          6.0,
+    "Syria":           6.0,
+    "Turkey":          6.0,
+    "Saudi Arabia":    5.0,
+    "UAE":             5.0,
+    "Yemen":           4.0,
+    "Canada":          6.0,
+    "Mexico":          5.0,
+    "Brazil":          6.0,
+    "Colombia":        6.0,
+    "Venezuela":       4.0,
+    "Cuba":            3.0,
+    "Argentina":       5.0,
+    "Chile":           4.0,
+    "Peru":            3.0,
+    "Panama":          3.0,
+    "El Salvador":     3.0,
+    "Nigeria":         5.0,
+    "Sudan":           4.0,
+    "Somalia":         3.0,
+    "Libya":           3.0,
+    "Egypt":           5.0,
+    "Algeria":         3.0,
+    "Morocco":         4.0,
+    "Myanmar":         4.0,
+    "Indonesia":       4.0,
+    "Vietnam":         3.0,
+    "Armenia":         3.0,
+    "Azerbaijan":      3.0,
+    "Denmark":         5.0,
+
+    # ── New additions ─────────────────────────────────────
+    # Anglosphere / Western Europe majors
+    "Australia":      10.0,
+    "New Zealand":     4.0,
+    "Spain":           6.0,
+    "Italy":           6.0,
+    "Poland":          6.0,
+    "Netherlands":     5.0,
+    "Belgium":         4.0,
+    "Portugal":        3.0,
+    "Czech Republic":  3.0,
+    "Norway":          3.0,
+    "Romania":         3.0,
+    "Sweden":          4.0,
+    "Finland":         3.0,
+    "Switzerland":     4.0,
+    "Austria":         3.0,
+    "Hungary":         3.0,
+    "Ireland":         3.0,
+    "Greece":          3.0,
+    "Luxembourg":      2.0,
+    "Iceland":         2.0,
+    "Malta":           1.5,
+    "Cyprus":          2.0,
+
+    # Eastern Europe / Balkans / FSU
+    "Belarus":         4.0,
+    "Serbia":          3.0,
+    "Albania":         2.0,
+    "Bulgaria":        2.0,
+    "Moldova":         2.0,
+    "Kosovo":          2.0,
+    "North Macedonia": 1.5,
+    "Bosnia":          2.0,
+    "Montenegro":      1.5,
+    "Croatia":         2.0,
+    "Slovakia":        2.0,
+    "Slovenia":        1.5,
+    "Lithuania":       2.0,
+    "Latvia":          2.0,
+    "Estonia":         2.0,
+    "Georgia":         2.5,
+    "Kazakhstan":      3.0,
+    "Uzbekistan":      2.5,
+    "Turkmenistan":    1.5,
+    "Kyrgyzstan":      1.5,
+    "Tajikistan":      1.5,
+
+    # Middle East / North Africa extras
+    "Iraq":            5.0,
+    "Afghanistan":     5.0,
+    "Jordan":          3.0,
+    "Lebanon":         4.0,
+    "Kuwait":          2.5,
+    "Bahrain":         2.0,
+    "Oman":            2.5,
+    "Qatar":           3.0,
+    "Tunisia":         3.0,
+
+    # Asia-Pacific extras
+    "Singapore":       4.0,
+    "Philippines":     4.0,
+    "Malaysia":        3.0,
+    "Thailand":        3.0,
+    "Cambodia":        2.0,
+    "Laos":            1.5,
+    "Bangladesh":      3.0,
+    "Nepal":           2.0,
+    "Sri Lanka":       2.5,
+    "Mongolia":        1.5,
+    "Brunei":          1.0,
+    "Timor-Leste":     1.0,
+    "Maldives":        1.5,
+    "Bhutan":          1.0,
+    "Papua New Guinea":1.5,
+    "Hong Kong":       5.0,
+
+    # Africa extras
+    "South Africa":    5.0,
+    "Kenya":           4.0,
+    "Ethiopia":        4.0,
+    "Ghana":           3.0,
+    "Ivory Coast":     2.5,
+    "Senegal":         2.5,
+    "Rwanda":          2.5,
+    "Uganda":          2.5,
+    "Zimbabwe":        2.5,
+    "Zambia":          2.0,
+    "Cameroon":        2.5,
+    "Mozambique":      2.0,
+    "Burkina Faso":    2.5,
+    "Niger":           2.5,
+    "Chad":            2.5,
+    "Guinea":          2.0,
+    "Angola":          2.5,
+    "DRC":             3.5,
+    "South Sudan":     3.0,
+    "Eritrea":         2.0,
+    "Djibouti":        1.5,
+    "Mauritania":      1.5,
+    "Liberia":         1.5,
+    "Sierra Leone":    1.5,
+    "Gabon":           1.5,
+    "Congo":           2.0,
+    "Namibia":         1.5,
+    "Eswatini":        1.0,
+    "Lesotho":         1.0,
+    "Malawi":          1.5,
+    "Tanzania":        2.0,
+    "Madagascar":      1.5,
+    "Botswana":        1.5,
+    "Mali":            2.5,
+
+    # Americas extras
+    "Bolivia":         2.5,
+    "Ecuador":         2.5,
+    "Paraguay":        2.0,
+    "Uruguay":         2.0,
+    "Guyana":          2.0,
+    "Dominican Republic": 2.0,
+    "Haiti":           3.0,
+    "Guatemala":       2.5,
+    "Honduras":        2.0,
+    "Nicaragua":       2.0,
+    "Costa Rica":      2.0,
+    "Bahamas":        1.5,
+    "Trinidad and Tobago": 1.5,
+    "Jamaica":         2.0,
 }
 
 def _seed_std(mean: float) -> float:
-    """Std = 40% of mean, floor of 1.0 to avoid division-by-zero."""
+    """Std = 60% of mean, floor of 1.0 to avoid division-by-zero."""
     return max(1.5, mean * 0.6)
 
 
@@ -244,6 +360,7 @@ RSS_SOURCES: Dict[str, str] = {
 # ──────────────────────────────────────────────────────────
 
 COUNTRIES = [
+    # ── Original 44 ──────────────────────────────────────
     {"country": "Russia",         "iso2": "RU"},
     {"country": "India",          "iso2": "IN"},
     {"country": "Pakistan",       "iso2": "PK"},
@@ -288,11 +405,144 @@ COUNTRIES = [
     {"country": "Denmark",        "iso2": "DK"},
     {"country": "Sudan",          "iso2": "SD"},
     {"country": "Ukraine",        "iso2": "UA"},
+
+    # ── New additions ─────────────────────────────────────
+    # Anglosphere / Western Europe majors
+    {"country": "Australia",      "iso2": "AU"},
+    {"country": "New Zealand",    "iso2": "NZ"},
+    {"country": "Spain",          "iso2": "ES"},
+    {"country": "Italy",          "iso2": "IT"},
+    {"country": "Poland",         "iso2": "PL"},
+    {"country": "Netherlands",    "iso2": "NL"},
+    {"country": "Belgium",        "iso2": "BE"},
+    {"country": "Portugal",       "iso2": "PT"},
+    {"country": "Czech Republic", "iso2": "CZ"},
+    {"country": "Norway",         "iso2": "NO"},
+    {"country": "Romania",        "iso2": "RO"},
+    {"country": "Sweden",         "iso2": "SE"},
+    {"country": "Finland",        "iso2": "FI"},
+    {"country": "Switzerland",    "iso2": "CH"},
+    {"country": "Austria",        "iso2": "AT"},
+    {"country": "Hungary",        "iso2": "HU"},
+    {"country": "Ireland",        "iso2": "IE"},
+    {"country": "Greece",         "iso2": "GR"},
+    {"country": "Luxembourg",     "iso2": "LU"},
+    {"country": "Iceland",        "iso2": "IS"},
+    {"country": "Malta",          "iso2": "MT"},
+    {"country": "Cyprus",         "iso2": "CY"},
+
+    # Eastern Europe / Balkans / FSU
+    {"country": "Belarus",        "iso2": "BY"},
+    {"country": "Serbia",         "iso2": "RS"},
+    {"country": "Albania",        "iso2": "AL"},
+    {"country": "Bulgaria",       "iso2": "BG"},
+    {"country": "Moldova",        "iso2": "MD"},
+    {"country": "Kosovo",         "iso2": "XK"},
+    {"country": "North Macedonia","iso2": "MK"},
+    {"country": "Bosnia",         "iso2": "BA"},
+    {"country": "Montenegro",     "iso2": "ME"},
+    {"country": "Croatia",        "iso2": "HR"},
+    {"country": "Slovakia",       "iso2": "SK"},
+    {"country": "Slovenia",       "iso2": "SI"},
+    {"country": "Lithuania",      "iso2": "LT"},
+    {"country": "Latvia",         "iso2": "LV"},
+    {"country": "Estonia",        "iso2": "EE"},
+    {"country": "Georgia",        "iso2": "GE"},
+    {"country": "Kazakhstan",     "iso2": "KZ"},
+    {"country": "Uzbekistan",     "iso2": "UZ"},
+    {"country": "Turkmenistan",   "iso2": "TM"},
+    {"country": "Kyrgyzstan",     "iso2": "KG"},
+    {"country": "Tajikistan",     "iso2": "TJ"},
+
+    # Middle East / North Africa extras
+    {"country": "Iraq",           "iso2": "IQ"},
+    {"country": "Afghanistan",    "iso2": "AF"},
+    {"country": "Jordan",         "iso2": "JO"},
+    {"country": "Lebanon",        "iso2": "LB"},
+    {"country": "Kuwait",         "iso2": "KW"},
+    {"country": "Bahrain",        "iso2": "BH"},
+    {"country": "Oman",           "iso2": "OM"},
+    {"country": "Qatar",          "iso2": "QA"},
+    {"country": "Tunisia",        "iso2": "TN"},
+
+    # Asia-Pacific extras
+    {"country": "Singapore",      "iso2": "SG"},
+    {"country": "Philippines",    "iso2": "PH"},
+    {"country": "Malaysia",       "iso2": "MY"},
+    {"country": "Thailand",       "iso2": "TH"},
+    {"country": "Cambodia",       "iso2": "KH"},
+    {"country": "Laos",           "iso2": "LA"},
+    {"country": "Bangladesh",     "iso2": "BD"},
+    {"country": "Nepal",          "iso2": "NP"},
+    {"country": "Sri Lanka",      "iso2": "LK"},
+    {"country": "Mongolia",       "iso2": "MN"},
+    {"country": "Brunei",         "iso2": "BN"},
+    {"country": "Timor-Leste",    "iso2": "TL"},
+    {"country": "Maldives",       "iso2": "MV"},
+    {"country": "Bhutan",         "iso2": "BT"},
+    {"country": "Papua New Guinea","iso2": "PG"},
+    {"country": "Hong Kong",      "iso2": "HK"},
+
+    # Africa extras
+    {"country": "South Africa",   "iso2": "ZA"},
+    {"country": "Kenya",          "iso2": "KE"},
+    {"country": "Ethiopia",       "iso2": "ET"},
+    {"country": "Ghana",          "iso2": "GH"},
+    {"country": "Ivory Coast",    "iso2": "CI"},
+    {"country": "Senegal",        "iso2": "SN"},
+    {"country": "Rwanda",         "iso2": "RW"},
+    {"country": "Uganda",         "iso2": "UG"},
+    {"country": "Zimbabwe",       "iso2": "ZW"},
+    {"country": "Zambia",         "iso2": "ZM"},
+    {"country": "Cameroon",       "iso2": "CM"},
+    {"country": "Mozambique",     "iso2": "MZ"},
+    {"country": "Burkina Faso",   "iso2": "BF"},
+    {"country": "Niger",          "iso2": "NE"},
+    {"country": "Chad",           "iso2": "TD"},
+    {"country": "Guinea",         "iso2": "GN"},
+    {"country": "Angola",         "iso2": "AO"},
+    {"country": "DRC",            "iso2": "CD"},
+    {"country": "South Sudan",    "iso2": "SS"},
+    {"country": "Eritrea",        "iso2": "ER"},
+    {"country": "Djibouti",       "iso2": "DJ"},
+    {"country": "Mauritania",     "iso2": "MR"},
+    {"country": "Liberia",        "iso2": "LR"},
+    {"country": "Sierra Leone",   "iso2": "SL"},
+    {"country": "Gabon",          "iso2": "GA"},
+    {"country": "Congo",          "iso2": "CG"},
+    {"country": "Namibia",        "iso2": "NA"},
+    {"country": "Eswatini",       "iso2": "SZ"},
+    {"country": "Lesotho",        "iso2": "LS"},
+    {"country": "Malawi",         "iso2": "MW"},
+    {"country": "Tanzania",       "iso2": "TZ"},
+    {"country": "Madagascar",     "iso2": "MG"},
+    {"country": "Botswana",       "iso2": "BW"},
+    {"country": "Mali",           "iso2": "ML"},
+
+    # Americas extras
+    {"country": "Bolivia",        "iso2": "BO"},
+    {"country": "Ecuador",        "iso2": "EC"},
+    {"country": "Paraguay",       "iso2": "PY"},
+    {"country": "Uruguay",        "iso2": "UY"},
+    {"country": "Guyana",         "iso2": "GY"},
+    {"country": "Dominican Republic", "iso2": "DO"},
+    {"country": "Haiti",          "iso2": "HT"},
+    {"country": "Guatemala",      "iso2": "GT"},
+    {"country": "Honduras",       "iso2": "HN"},
+    {"country": "Nicaragua",      "iso2": "NI"},
+    {"country": "Costa Rica",     "iso2": "CR"},
+    {"country": "Trinidad and Tobago", "iso2": "TT"},
+    {"country": "Jamaica",        "iso2": "JM"},
+    {"country": "Bahamas",        "iso2": "BS"},
 ]
 
+
+# ──────────────────────────────────────────────────────────
+# COUNTRY ALIASES
+# ──────────────────────────────────────────────────────────
+
 COUNTRY_ALIASES: Dict[str, List[str]] = {
-    # Aliases include: country name/demonyms, capital city, major cities (pop >1M),
-    # and key political figures / organisations.
+    # ── Original 44 ──────────────────────────────────────
     "Russia":         ["russia", "russian", "russians", "moscow", "kremlin", "putin",
                        "saint petersburg", "st. petersburg", "novosibirsk", "yekaterinburg",
                        "nizhny novgorod", "kazan", "chelyabinsk", "omsk", "samara", "rostov"],
@@ -408,6 +658,240 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "zelensky", "zelenskyy",
                        "kharkiv", "dnipro", "odessa", "odesa", "donetsk",
                        "zaporizhzhia", "lviv", "kryvyi rih", "mykolaiv", "mariupol"],
+
+    # ── New additions ─────────────────────────────────────
+    # Anglosphere / Western Europe majors
+    "Australia":      ["australia", "australian", "australians", "canberra", "albanese",
+                       "sydney", "melbourne", "brisbane", "perth", "adelaide",
+                       "gold coast", "newcastle nsw", "canberra", "wollongong",
+                       "hobart", "darwin"],
+    "New Zealand":    ["new zealand", "new zealander", "new zealanders", "wellington",
+                       "auckland", "christchurch", "hamilton", "tauranga", "dunedin"],
+    "Spain":          ["spain", "spanish", "spaniards", "madrid", "sanchez",
+                       "barcelona", "valencia", "seville", "zaragoza", "malaga",
+                       "murcia", "palma", "bilbao", "alicante", "cordoba"],
+    "Italy":          ["italy", "italian", "italians", "rome", "meloni",
+                       "milan", "naples", "turin", "palermo", "genoa",
+                       "bologna", "florence", "bari", "catania", "venice"],
+    "Poland":         ["poland", "polish", "poles", "warsaw", "tusk",
+                       "krakow", "lodz", "wroclaw", "poznan", "gdansk",
+                       "szczecin", "bydgoszcz", "lublin", "katowice"],
+    "Netherlands":    ["netherlands", "dutch", "amsterdam", "rutte", "schoof",
+                       "rotterdam", "the hague", "utrecht", "eindhoven",
+                       "tilburg", "groningen", "almere", "breda"],
+    "Belgium":        ["belgium", "belgian", "belgians", "brussels", "de croo",
+                       "antwerp", "ghent", "charleroi", "liege", "bruges"],
+    "Portugal":       ["portugal", "portuguese", "lisbon", "porto",
+                       "braga", "setubal", "coimbra", "funchal"],
+    "Czech Republic": ["czech republic", "czechia", "czech", "czechs", "prague",
+                       "brno", "ostrava", "pilsen", "liberec"],
+    "Norway":         ["norway", "norwegian", "norwegians", "oslo",
+                       "bergen", "trondheim", "stavanger", "tromsø", "tromso"],
+    "Romania":        ["romania", "romanian", "romanians", "bucharest",
+                       "cluj-napoca", "timisoara", "iasi", "constanta", "craiova"],
+    "Sweden":         ["sweden", "swedish", "swedes", "stockholm",
+                       "gothenburg", "malmo", "uppsala", "vasteras", "orebro"],
+    "Finland":        ["finland", "finnish", "finns", "helsinki",
+                       "espoo", "tampere", "vantaa", "oulu", "turku"],
+    "Switzerland":    ["switzerland", "swiss", "bern", "zurich",
+                       "geneva", "basel", "lausanne", "winterthur"],
+    "Austria":        ["austria", "austrian", "austrians", "vienna",
+                       "graz", "linz", "salzburg", "innsbruck"],
+    "Hungary":        ["hungary", "hungarian", "hungarians", "budapest", "orban",
+                       "debrecen", "miskolc", "pecs", "gyor"],
+    "Ireland":        ["ireland", "irish", "dublin", "varadkar", "harris",
+                       "cork", "limerick", "galway", "waterford"],
+    "Greece":         ["greece", "greek", "greeks", "athens", "mitsotakis",
+                       "thessaloniki", "patras", "heraklion", "larissa"],
+    "Luxembourg":     ["luxembourg", "luxembourgish", "luxembourg city"],
+    "Iceland":        ["iceland", "icelandic", "icelanders", "reykjavik"],
+    "Malta":          ["malta", "maltese", "valletta"],
+    "Cyprus":         ["cyprus", "cypriot", "cypriots", "nicosia", "limassol"],
+
+    # Eastern Europe / Balkans / FSU
+    "Belarus":        ["belarus", "belarusian", "belarusians", "minsk", "lukashenko",
+                       "brest", "grodno", "gomel", "mogilev", "vitebsk"],
+    "Serbia":         ["serbia", "serbian", "serbians", "belgrade", "vucic",
+                       "novi sad", "nis", "kragujevac", "subotica"],
+    "Albania":        ["albania", "albanian", "albanians", "tirana",
+                       "durres", "shkoder", "vlore", "elbasan"],
+    "Bulgaria":       ["bulgaria", "bulgarian", "bulgarians", "sofia",
+                       "plovdiv", "varna", "burgas", "stara zagora"],
+    "Moldova":        ["moldova", "moldovan", "moldovans", "chisinau",
+                       "tiraspol", "balti"],
+    "Kosovo":         ["kosovo", "kosovar", "kosovars", "pristina"],
+    "North Macedonia": ["north macedonia", "macedonian", "macedonians", "skopje",
+                        "bitola", "kumanovo", "tetovo"],
+    "Bosnia":         ["bosnia", "bosnian", "bosnians", "bosnia and herzegovina",
+                       "sarajevo", "banja luka", "mostar", "tuzla"],
+    "Montenegro":     ["montenegro", "montenegrin", "podgorica"],
+    "Croatia":        ["croatia", "croatian", "croatians", "zagreb",
+                       "split", "rijeka", "osijek", "zadar", "dubrovnik"],
+    "Slovakia":       ["slovakia", "slovak", "slovaks", "bratislava",
+                       "kosice", "presov", "zilina", "nitra"],
+    "Slovenia":       ["slovenia", "slovenian", "slovenians", "ljubljana",
+                       "maribor", "celje", "kranj"],
+    "Lithuania":      ["lithuania", "lithuanian", "lithuanians", "vilnius",
+                       "kaunas", "klaipeda", "siauliai", "panevezys"],
+    "Latvia":         ["latvia", "latvian", "latvians", "riga",
+                       "daugavpils", "liepaja", "jelgava"],
+    "Estonia":        ["estonia", "estonian", "estonians", "tallinn",
+                       "tartu", "narva", "parnu"],
+    "Georgia":        ["georgia country", "georgian", "georgians", "tbilisi",
+                       "kutaisi", "batumi", "rustavi"],
+    "Kazakhstan":     ["kazakhstan", "kazakh", "kazakhs", "nur-sultan", "astana",
+                       "almaty", "shymkent", "karaganda", "aktobe"],
+    "Uzbekistan":     ["uzbekistan", "uzbek", "uzbeks", "tashkent",
+                       "samarkand", "namangan", "andijan", "bukhara"],
+    "Turkmenistan":   ["turkmenistan", "turkmen", "ashgabat"],
+    "Kyrgyzstan":     ["kyrgyzstan", "kyrgyz", "bishkek", "osh"],
+    "Tajikistan":     ["tajikistan", "tajik", "tajiks", "dushanbe",
+                       "khujand", "kulob"],
+
+    # Middle East / North Africa extras
+    "Iraq":           ["iraq", "iraqi", "iraqis", "baghdad",
+                       "basra", "mosul", "erbil", "najaf", "karbala", "kirkuk"],
+    "Afghanistan":    ["afghanistan", "afghan", "afghans", "kabul", "taliban",
+                       "kandahar", "herat", "mazar-i-sharif", "jalalabad"],
+    "Jordan":         ["jordan", "jordanian", "jordanians", "amman",
+                       "zarqa", "irbid", "aqaba"],
+    "Lebanon":        ["lebanon", "lebanese", "beirut", "hezbollah",
+                       "tripoli lebanon", "sidon", "tyre"],
+    "Kuwait":         ["kuwait", "kuwaiti", "kuwaitis", "kuwait city"],
+    "Bahrain":        ["bahrain", "bahraini", "bahrainis", "manama"],
+    "Oman":           ["oman", "omani", "omanis", "muscat",
+                       "salalah", "sohar", "nizwa"],
+    "Qatar":          ["qatar", "qatari", "qataris", "doha"],
+    "Tunisia":        ["tunisia", "tunisian", "tunisians", "tunis",
+                       "sfax", "sousse", "kairouan", "bizerte"],
+
+    # Asia-Pacific extras
+    "Singapore":      ["singapore", "singaporean", "singaporeans"],
+    "Philippines":    ["philippines", "philippine", "filipino", "filipinos",
+                       "manila", "quezon city", "caloocan", "davao", "cebu",
+                       "zamboanga", "antipolo", "pasig", "taguig", "marcos",
+                       "duterte"],
+    "Malaysia":       ["malaysia", "malaysian", "malaysians", "kuala lumpur",
+                       "george town", "johor bahru", "ipoh", "shah alam",
+                       "petaling jaya", "kota kinabalu"],
+    "Thailand":       ["thailand", "thai", "thais", "bangkok",
+                       "chiang mai", "pattaya", "nonthaburi", "hat yai",
+                       "udon thani", "phuket"],
+    "Cambodia":       ["cambodia", "cambodian", "cambodians", "phnom penh",
+                       "siem reap", "sihanoukville"],
+    "Laos":           ["laos", "laotian", "laotians", "lao", "vientiane",
+                       "luang prabang", "pakse"],
+    "Bangladesh":     ["bangladesh", "bangladeshi", "bangladeshis", "dhaka",
+                       "chittagong", "sylhet", "rajshahi", "khulna", "mymensingh"],
+    "Nepal":          ["nepal", "nepali", "nepalese", "kathmandu",
+                       "pokhara", "patan", "biratnagar"],
+    "Sri Lanka":      ["sri lanka", "sri lankan", "colombo", "kandy",
+                       "galle", "jaffna", "batticaloa"],
+    "Mongolia":       ["mongolia", "mongolian", "mongolians", "ulaanbaatar",
+                       "erdenet", "darkhan"],
+    "Brunei":         ["brunei", "bruneian", "bandar seri begawan"],
+    "Timor-Leste":    ["timor-leste", "east timor", "timorese", "dili"],
+    "Maldives":       ["maldives", "maldivian", "male"],
+    "Bhutan":         ["bhutan", "bhutanese", "thimphu", "phuntsholing"],
+    "Papua New Guinea": ["papua new guinea", "papua", "port moresby",
+                         "lae", "mount hagen"],
+    "Hong Kong":      ["hong kong", "hongkonger", "hongkongers"],
+
+    # Africa extras
+    "South Africa":   ["south africa", "south african", "south africans",
+                       "pretoria", "johannesburg", "cape town", "durban",
+                       "soweto", "east london", "port elizabeth", "gqeberha",
+                       "ramaphosa", "anc"],
+    "Kenya":          ["kenya", "kenyan", "kenyans", "nairobi",
+                       "mombasa", "kisumu", "nakuru", "eldoret", "ruto"],
+    "Ethiopia":       ["ethiopia", "ethiopian", "ethiopians", "addis ababa",
+                       "dire dawa", "gondar", "mekele", "bahir dar", "abiy"],
+    "Ghana":          ["ghana", "ghanaian", "ghanaians", "accra",
+                       "kumasi", "tamale", "sekondi", "takoradi"],
+    "Ivory Coast":    ["ivory coast", "ivorian", "ivorians", "cote d'ivoire",
+                       "cote divoire", "abidjan", "yamoussoukro", "bouake"],
+    "Senegal":        ["senegal", "senegalese", "dakar", "touba", "thies"],
+    "Rwanda":         ["rwanda", "rwandan", "rwandans", "kigali",
+                       "butare", "gitarama"],
+    "Uganda":         ["uganda", "ugandan", "ugandans", "kampala",
+                       "gulu", "lira", "mbarara", "jinja", "museveni"],
+    "Zimbabwe":       ["zimbabwe", "zimbabwean", "zimbabweans", "harare",
+                       "bulawayo", "chitungwiza", "mutare", "mnangagwa"],
+    "Zambia":         ["zambia", "zambian", "zambians", "lusaka",
+                       "kitwe", "ndola", "kabwe", "chingola"],
+    "Cameroon":       ["cameroon", "cameroonian", "cameroonians", "yaounde",
+                       "douala", "garoua", "bamenda", "maroua"],
+    "Mozambique":     ["mozambique", "mozambican", "mozambicans", "maputo",
+                       "matola", "nampula", "beira", "nacala"],
+    "Burkina Faso":   ["burkina faso", "burkinabe", "ouagadougou",
+                       "bobo-dioulasso", "koudougou", "traore"],
+    "Niger":          ["niger", "nigerien", "niamey", "zinder", "maradi",
+                       "agadez"],
+    "Chad":           ["chad", "chadian", "chadians", "n'djamena",
+                       "moundou", "sarh", "abeche"],
+    "Guinea":         ["guinea", "guinean", "guineans", "conakry",
+                       "nzerekore", "kindia", "kankan"],
+    "Angola":         ["angola", "angolan", "angolans", "luanda",
+                       "huambo", "lobito", "benguela", "malanje"],
+    "DRC":            ["drc", "democratic republic of the congo", "congo kinshasa",
+                       "kinshasa", "lubumbashi", "mbuji-mayi", "goma", "bukavu",
+                       "m23", "eastern congo"],
+    "South Sudan":    ["south sudan", "south sudanese", "juba",
+                       "wau", "malakal", "yei"],
+    "Eritrea":        ["eritrea", "eritrean", "eritreans", "asmara"],
+    "Djibouti":       ["djibouti", "djiboutian"],
+    "Mauritania":     ["mauritania", "mauritanian", "mauritanians", "nouakchott",
+                       "nouadhibou"],
+    "Liberia":        ["liberia", "liberian", "liberians", "monrovia"],
+    "Sierra Leone":   ["sierra leone", "sierra leonean", "freetown",
+                       "bo", "kenema"],
+    "Gabon":          ["gabon", "gabonese", "libreville", "port-gentil"],
+    "Congo":          ["republic of the congo", "congo brazzaville",
+                       "brazzaville", "pointe-noire"],
+    "Namibia":        ["namibia", "namibian", "namibians", "windhoek",
+                       "rundu", "walvis bay"],
+    "Eswatini":       ["eswatini", "swazi", "swazis", "mbabane", "manzini"],
+    "Lesotho":        ["lesotho", "basotho", "maseru"],
+    "Malawi":         ["malawi", "malawian", "malawians", "lilongwe",
+                       "blantyre", "mzuzu"],
+    "Tanzania":       ["tanzania", "tanzanian", "tanzanians", "dodoma",
+                       "dar es salaam", "mwanza", "arusha", "zanzibar"],
+    "Madagascar":     ["madagascar", "malagasy", "antananarivo",
+                       "toamasina", "antsirabe", "fianarantsoa"],
+    "Botswana":       ["botswana", "batswana", "gaborone",
+                       "francistown", "molepolole"],
+    "Mali":           ["mali", "malian", "malians", "bamako",
+                       "sikasso", "mopti", "koutiala", "ségou", "segou"],
+
+    # Americas extras
+    "Bolivia":        ["bolivia", "bolivian", "bolivians", "sucre", "la paz",
+                       "santa cruz de la sierra", "cochabamba", "el alto"],
+    "Ecuador":        ["ecuador", "ecuadorian", "ecuadorians", "quito",
+                       "guayaquil", "cuenca", "santo domingo", "noboa"],
+    "Paraguay":       ["paraguay", "paraguayan", "paraguayans", "asuncion",
+                       "ciudad del este", "san lorenzo"],
+    "Uruguay":        ["uruguay", "uruguayan", "uruguayans", "montevideo",
+                       "salto", "ciudad de la costa"],
+    "Guyana":         ["guyana", "guyanese", "georgetown guyana",
+                       "linden", "new amsterdam"],
+    "Dominican Republic": ["dominican republic", "dominican", "dominicans",
+                           "santo domingo", "santiago dominican"],
+    "Haiti":          ["haiti", "haitian", "haitians", "port-au-prince",
+                       "cap-haïtien", "cap haitien", "gonaives"],
+    "Guatemala":      ["guatemala", "guatemalan", "guatemalans", "guatemala city",
+                       "mixco", "villa nueva", "quetzaltenango"],
+    "Honduras":       ["honduras", "honduran", "hondurans", "tegucigalpa",
+                       "san pedro sula", "choloma"],
+    "Nicaragua":      ["nicaragua", "nicaraguan", "nicaraguans", "managua",
+                       "leon nicaragua", "masaya", "ortega"],
+    "Costa Rica":     ["costa rica", "costa rican", "costa ricans", "san jose costa rica",
+                       "alajuela", "cartago"],
+    "Trinidad and Tobago": ["trinidad and tobago", "trinidadian", "trinidadians",
+                            "tobagonian", "port of spain", "san fernando"],
+    "Jamaica":        ["jamaica", "jamaican", "jamaicans", "kingston jamaica",
+                       "montego bay", "portmore"],
+    "Bahamas":        ["bahamas", "bahamian", "bahamians", "nassau bahamas",
+                       "freeport bahamas"],
 }
 
 
@@ -653,8 +1137,6 @@ def analyze(current_counts: Dict[str, float],
                 # std=0 means all baseline values were identical.
                 # Use a floor std of max(1.5, 20% of mean) so that small
                 # integer wobbles on low-volume countries don't falsely trend.
-                # e.g. Somalia 0→1 with mean=0: floor_std=1.5, z=0.67 (normal)
-                #      Germany 1→6 with mean=1: floor_std=1.5, z=3.3 (trending - real)
                 floor_std = max(1.5, mu * 0.20)
                 z = (current - mu) / floor_std
         else:
