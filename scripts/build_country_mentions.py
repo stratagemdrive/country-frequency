@@ -941,6 +941,7 @@ def _alias_matches(alias: str, text: str) -> bool:
 # HELPERS
 # ──────────────────────────────────────────────────────────
 
+def _norm(s: str) -> str:
     return " ".join((s or "").lower().split())
 
 def fetch_text(url: str) -> Optional[str]:
