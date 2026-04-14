@@ -5,42 +5,6 @@ Scans 30 credible US/UK/CA news sources via RSS for a 24-hour window,
 counts how many articles mention each tracked country,
 compares against a rolling 7-day baseline, computes z-scores,
 flags trending countries, and writes public/country_mentions.json.
-
-JSON shape (Base44-friendly):
-{
-  "meta": { ... },
-  "countries": [
-    {
-      "country":          "Russia",
-      "iso2":             "RU",
-      "mentions":         42,
-      "baseline_mean":    31.4,
-      "baseline_std":     6.2,
-      "baseline_n":       14,
-      "baseline_method":  method,
-      "z_score":          1.71,
-      "trend_status":     "trending",   // "trending" | "elevated" | "normal" | "low"
-      "pct_change":       33.8,
-      "history": [
-        { "window_end": "2026-04-26T11:54:00Z", "mentions": 28 },
-        ...
-      ]
-    },
-    ...
-  ]
-}
-
-trend_status logic:
-  z >= 2.0  → "trending"
-  z >= 1.0  → "elevated"
-  z <= -1.0 → "low"
-  else      → "normal"
-
-Cold-start behaviour (< BASELINE_MIN_RUNS history points):
-  Falls back to a hybrid score combining:
-    (a) seed baseline (realistic long-term averages per country), AND
-    (b) relative ranking within the current run's distribution.
-  This means Iran at 183 mentions is correctly flagged "trending" on run #1.
 """
 
 from __future__ import annotations
@@ -65,16 +29,9 @@ from dateutil import parser as dtparser
 
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
-BASELINE_MIN_RUNS = 100     # minimum baseline points to use rolling stats.
-                              # The baseline window is 30d minus the 3-day recency
-                              # exclusion = 27 usable days. At ~6-7 runs/day (observed
-                              # cadence), 100 points ≈ 15 days of usable history,
-                              # meaning rolling baseline kicks in ~18 days after a
-                              # country is first tracked. Below this we fall back to
-                              # cold_start_hybrid.
-BASELINE_DAYS     = 30     # how far back the baseline window looks
-BASELINE_RECENCY_EXCLUDE_DAYS = 3   # exclude the most recent N days from baseline
-                                    # so an ongoing event doesn't erase its own signal
+BASELINE_MIN_RUNS = 100
+BASELINE_DAYS     = 30
+BASELINE_RECENCY_EXCLUDE_DAYS = 3
 TRENDING_Z        = 2.0
 ELEVATED_Z        = 1.0
 LOW_Z             = -1.0
@@ -96,19 +53,9 @@ HEADERS = {
 OUTPUT_DIR  = Path("public")
 OUTPUT_FILE = OUTPUT_DIR / "country_mentions.json"
 
-# ── Source-bias discount ───────────────────────────────────
-# When a source mentions its OWN country, that mention is
-# worth HOME_SOURCE_WEIGHT instead of 1.0 to dampen ambient
-# domestic references (e.g. BBC constantly saying "London",
-# CBC constantly saying "Canada").
-# 0.25 = one home-source mention ≈ one-quarter of a foreign mention.
 HOME_SOURCE_WEIGHT: float = 0.25
 
-# Maps each source name → the country it is "home" to.
-# Only UK and Canadian outlets need entries; US outlets cover
-# the US itself which is not in our tracked-country list.
 SOURCE_HOME_COUNTRY: Dict[str, str] = {
-    # UK outlets  →  United Kingdom
     "BBC World":       "United Kingdom",
     "The Guardian":    "United Kingdom",
     "The Times UK":    "United Kingdom",
@@ -117,7 +64,6 @@ SOURCE_HOME_COUNTRY: Dict[str, str] = {
     "Sky News":        "United Kingdom",
     "The Economist":   "United Kingdom",
     "Financial Times": "United Kingdom",
-    # Canadian outlets  →  Canada
     "CBC World":       "Canada",
     "Globe and Mail":  "Canada",
     "National Post":   "Canada",
@@ -127,16 +73,92 @@ SOURCE_HOME_COUNTRY: Dict[str, str] = {
 
 
 # ──────────────────────────────────────────────────────────
+# SPORTS / ENTERTAINMENT FILTER
+# ──────────────────────────────────────────────────────────
+
+# RSS feed tag/category values that identify non-news content.
+# feedparser normalises tags into entry.tags[n].term (lowercased where possible).
+SKIP_CATEGORIES: set = {
+    "sport", "sports", "football", "soccer", "rugby", "cricket",
+    "tennis", "golf", "athletics", "cycling", "motorsport", "f1",
+    "formula one", "nfl", "nba", "mlb", "nhl", "mls",
+    "entertainment", "lifestyle", "culture", "showbiz",
+    "film", "music", "celebrity",
+}
+
+# Title-level sports/entertainment keyword filter.
+# If ANY of these appear in the article title (word-boundary matched),
+# the article is skipped entirely before mention counting.
+# Kept deliberately tight — only terms that are unambiguously non-geopolitical.
+SPORTS_TITLE_KEYWORDS: set = {
+    # Generic match/game terms
+    "match", "fixture", "kickoff", "kick-off", "full-time", "half-time",
+    "penalty shootout", "extra time", "replay", "friendly",
+    "qualifier", "qualifiers", "knockout", "semifinal", "semi-final",
+    "final score", "scoreline",
+    # Competitions / tournaments
+    "world cup", "afcon", "africa cup of nations",
+    "champions league", "europa league", "premier league",
+    "bundesliga", "serie a", "la liga", "ligue 1",
+    "six nations", "rugby world cup", "super rugby",
+    "cricket world cup", "ipl", "test match",
+    "grand prix", "formula one", "formula 1",
+    "olympic", "olympics", "paralympic",
+    "wimbledon", "us open", "australian open", "french open", "roland garros",
+    # South Africa specific sports signals
+    "springboks", "springbok",
+    "bafana bafana", "bafana",
+    "proteas",
+    "supersport", "super sport",
+    # Serbia / Balkans sports signals
+    "djokovic", "novak",
+    # Other common high-false-positive athletes/teams by country
+    "messi", "ronaldo", "mbappé", "mbappe",
+    "lewandowski",                          # Poland
+    "salah",                                # Egypt
+    "son heung", "son heung-min",           # South Korea
+    "kane", "bellingham", "saka",           # England (UK)
+    # General sports section markers
+    "transfer window", "transfer fee", "signing fee",
+    "manager sacked", "head coach sacked", "appointed manager",
+    "locker room", "dressing room",
+    "standings", "league table", "points table",
+    "batting", "bowling", "wicket", "innings",
+    "try scored", "converted try",
+}
+
+# Compile a single regex for fast title matching (word-boundary where helpful)
+_SPORTS_PATTERN = re.compile(
+    r'\b(' + '|'.join(re.escape(kw) for kw in SPORTS_TITLE_KEYWORDS) + r')\b',
+    re.IGNORECASE,
+)
+
+def _is_sports_article(entry: dict, title_norm: str) -> bool:
+    """
+    Return True if the article should be skipped as sports/entertainment content.
+
+    Checks:
+      1. feedparser tag/category fields against SKIP_CATEGORIES
+      2. Title against SPORTS_TITLE_KEYWORDS regex
+    """
+    # 1. Category tags
+    for tag in entry.get("tags", []):
+        term = (tag.get("term") or tag.get("label") or "").lower().strip()
+        if term in SKIP_CATEGORIES:
+            return True
+
+    # 2. Title keyword match
+    if _SPORTS_PATTERN.search(title_norm):
+        return True
+
+    return False
+
+
+# ──────────────────────────────────────────────────────────
 # SEED BASELINE
 # ──────────────────────────────────────────────────────────
-# Realistic "quiet news day" mean mention counts per country
-# across ~500 articles from 30 sources in a 24h window.
-# Used as the baseline on run #1 (cold start) so trending
-# detection works immediately without waiting for history to build.
-# Std is set to 40-60% of mean (reasonable for news counts).
 
 SEED_BASELINE: Dict[str, float] = {
-    # ── Original 44 ──────────────────────────────────────
     "Russia":         25.0,
     "China":          20.0,
     "Ukraine":        20.0,
@@ -181,9 +203,6 @@ SEED_BASELINE: Dict[str, float] = {
     "Armenia":         3.0,
     "Azerbaijan":      3.0,
     "Denmark":         5.0,
-
-    # ── New additions ─────────────────────────────────────
-    # Anglosphere / Western Europe majors
     "Australia":      10.0,
     "New Zealand":     4.0,
     "Spain":           6.0,
@@ -206,8 +225,6 @@ SEED_BASELINE: Dict[str, float] = {
     "Iceland":         2.0,
     "Malta":           1.5,
     "Cyprus":          2.0,
-
-    # Eastern Europe / Balkans / FSU
     "Belarus":         4.0,
     "Serbia":          3.0,
     "Albania":         2.0,
@@ -229,8 +246,6 @@ SEED_BASELINE: Dict[str, float] = {
     "Turkmenistan":    1.5,
     "Kyrgyzstan":      1.5,
     "Tajikistan":      1.5,
-
-    # Middle East / North Africa extras
     "Iraq":            5.0,
     "Afghanistan":     5.0,
     "Jordan":          3.0,
@@ -240,8 +255,6 @@ SEED_BASELINE: Dict[str, float] = {
     "Oman":            2.5,
     "Qatar":           3.0,
     "Tunisia":         3.0,
-
-    # Asia-Pacific extras
     "Singapore":       4.0,
     "Philippines":     4.0,
     "Malaysia":        3.0,
@@ -258,8 +271,6 @@ SEED_BASELINE: Dict[str, float] = {
     "Bhutan":          1.0,
     "Papua New Guinea":1.5,
     "Hong Kong":       5.0,
-
-    # Africa extras
     "South Africa":    5.0,
     "Kenya":           4.0,
     "Ethiopia":        4.0,
@@ -294,8 +305,6 @@ SEED_BASELINE: Dict[str, float] = {
     "Madagascar":      1.5,
     "Botswana":        1.5,
     "Mali":            2.5,
-
-    # Americas extras
     "Bolivia":         2.5,
     "Ecuador":         2.5,
     "Paraguay":        2.0,
@@ -313,16 +322,14 @@ SEED_BASELINE: Dict[str, float] = {
 }
 
 def _seed_std(mean: float) -> float:
-    """Std = 60% of mean, floor of 1.0 to avoid division-by-zero."""
     return max(1.5, mean * 0.6)
 
 
 # ──────────────────────────────────────────────────────────
-# 30 CREDIBLE US / UK / CA NEWS SOURCES  (RSS)
+# RSS SOURCES
 # ──────────────────────────────────────────────────────────
 
 RSS_SOURCES: Dict[str, str] = {
-    # ── United States ──────────────────────────────────────
     "AP News":             "https://rsshub.app/apnews/topics/ap-top-news",
     "Reuters":             "https://feeds.reuters.com/reuters/topNews",
     "NPR World":           "https://www.npr.org/rss/rss.php?id=1004",
@@ -340,8 +347,6 @@ RSS_SOURCES: Dict[str, str] = {
     "Foreign Policy":      "https://foreignpolicy.com/feed/",
     "Defense One":         "https://www.defenseone.com/rss/all/",
     "Voice of America":    "https://www.voanews.com/api/zk_$egt",
-
-    # ── United Kingdom ─────────────────────────────────────
     "BBC World":           "https://feeds.bbci.co.uk/news/world/rss.xml",
     "The Guardian":        "https://www.theguardian.com/world/rss",
     "The Times UK":        "https://www.thetimes.co.uk/rss/world.xml",
@@ -350,8 +355,6 @@ RSS_SOURCES: Dict[str, str] = {
     "Sky News":            "https://feeds.skynews.com/feeds/rss/world.xml",
     "The Economist":       "https://www.economist.com/international/rss.xml",
     "Financial Times":     "https://www.ft.com/world?format=rss",
-
-    # ── Canada ─────────────────────────────────────────────
     "CBC World":           "https://rss.cbc.ca/lineup/world.xml",
     "Globe and Mail":      "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/world/",
     "National Post":       "https://nationalpost.com/feed/",
@@ -365,7 +368,6 @@ RSS_SOURCES: Dict[str, str] = {
 # ──────────────────────────────────────────────────────────
 
 COUNTRIES = [
-    # ── Original 44 ──────────────────────────────────────
     {"country": "Russia",         "iso2": "RU"},
     {"country": "India",          "iso2": "IN"},
     {"country": "Pakistan",       "iso2": "PK"},
@@ -410,9 +412,6 @@ COUNTRIES = [
     {"country": "Denmark",        "iso2": "DK"},
     {"country": "Sudan",          "iso2": "SD"},
     {"country": "Ukraine",        "iso2": "UA"},
-
-    # ── New additions ─────────────────────────────────────
-    # Anglosphere / Western Europe majors
     {"country": "Australia",      "iso2": "AU"},
     {"country": "New Zealand",    "iso2": "NZ"},
     {"country": "Spain",          "iso2": "ES"},
@@ -435,8 +434,6 @@ COUNTRIES = [
     {"country": "Iceland",        "iso2": "IS"},
     {"country": "Malta",          "iso2": "MT"},
     {"country": "Cyprus",         "iso2": "CY"},
-
-    # Eastern Europe / Balkans / FSU
     {"country": "Belarus",        "iso2": "BY"},
     {"country": "Serbia",         "iso2": "RS"},
     {"country": "Albania",        "iso2": "AL"},
@@ -458,8 +455,6 @@ COUNTRIES = [
     {"country": "Turkmenistan",   "iso2": "TM"},
     {"country": "Kyrgyzstan",     "iso2": "KG"},
     {"country": "Tajikistan",     "iso2": "TJ"},
-
-    # Middle East / North Africa extras
     {"country": "Iraq",           "iso2": "IQ"},
     {"country": "Afghanistan",    "iso2": "AF"},
     {"country": "Jordan",         "iso2": "JO"},
@@ -469,8 +464,6 @@ COUNTRIES = [
     {"country": "Oman",           "iso2": "OM"},
     {"country": "Qatar",          "iso2": "QA"},
     {"country": "Tunisia",        "iso2": "TN"},
-
-    # Asia-Pacific extras
     {"country": "Singapore",      "iso2": "SG"},
     {"country": "Philippines",    "iso2": "PH"},
     {"country": "Malaysia",       "iso2": "MY"},
@@ -487,8 +480,6 @@ COUNTRIES = [
     {"country": "Bhutan",         "iso2": "BT"},
     {"country": "Papua New Guinea","iso2": "PG"},
     {"country": "Hong Kong",      "iso2": "HK"},
-
-    # Africa extras
     {"country": "South Africa",   "iso2": "ZA"},
     {"country": "Kenya",          "iso2": "KE"},
     {"country": "Ethiopia",       "iso2": "ET"},
@@ -523,8 +514,6 @@ COUNTRIES = [
     {"country": "Madagascar",     "iso2": "MG"},
     {"country": "Botswana",       "iso2": "BW"},
     {"country": "Mali",           "iso2": "ML"},
-
-    # Americas extras
     {"country": "Bolivia",        "iso2": "BO"},
     {"country": "Ecuador",        "iso2": "EC"},
     {"country": "Paraguay",       "iso2": "PY"},
@@ -547,7 +536,6 @@ COUNTRIES = [
 # ──────────────────────────────────────────────────────────
 
 COUNTRY_ALIASES: Dict[str, List[str]] = {
-    # ── Original 44 ──────────────────────────────────────
     "Russia":         ["russia", "russian", "russians", "moscow", "kremlin", "putin",
                        "saint petersburg", "st. petersburg", "novosibirsk", "yekaterinburg",
                        "nizhny novgorod", "kazan", "chelyabinsk", "omsk", "samara", "rostov"],
@@ -663,12 +651,9 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "zelensky", "zelenskyy",
                        "kharkiv", "dnipro", "odessa", "odesa", "donetsk",
                        "zaporizhzhia", "lviv", "kryvyi rih", "mykolaiv", "mariupol"],
-
-    # ── New additions ─────────────────────────────────────
-    # Anglosphere / Western Europe majors
     "Australia":      ["australia", "australian", "australians", "canberra", "albanese",
                        "sydney", "melbourne", "brisbane", "perth", "adelaide",
-                       "gold coast", "newcastle nsw", "canberra", "wollongong",
+                       "gold coast", "newcastle nsw", "wollongong",
                        "hobart", "darwin"],
     "New Zealand":    ["new zealand", "new zealander", "new zealanders", "wellington",
                        "auckland", "christchurch", "hamilton", "tauranga", "dunedin"],
@@ -712,8 +697,6 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Iceland":        ["iceland", "icelandic", "icelanders", "reykjavik"],
     "Malta":          ["malta", "maltese", "valletta"],
     "Cyprus":         ["cyprus", "cypriot", "cypriots", "nicosia", "limassol"],
-
-    # Eastern Europe / Balkans / FSU
     "Belarus":        ["belarus", "belarusian", "belarusians", "minsk", "lukashenko",
                        "brest", "grodno", "gomel", "mogilev", "vitebsk"],
     "Serbia":         ["serbia", "serbian", "serbians", "belgrade", "vucic",
@@ -742,8 +725,14 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "daugavpils", "liepaja", "jelgava"],
     "Estonia":        ["estonia", "estonian", "estonians", "tallinn",
                        "tartu", "narva", "parnu"],
-    "Georgia":        ["georgia country", "georgian", "georgians", "tbilisi",
-                       "kutaisi", "batumi", "rustavi"],
+    # ── Georgia: city/leader names only — no bare "georgia" which hits the US state ──
+    # Tbilisi, Kutaisi, Batumi are unambiguous; "georgian" is matched only when
+    # it cannot refer to the architectural/historical style (rare in news context).
+    "Georgia":        ["tbilisi", "kutaisi", "batumi", "rustavi",
+                       "georgian dream", "georgian government", "georgian president",
+                       "georgian prime minister", "georgian parliament",
+                       "georgian opposition", "georgian protests",
+                       "ivanishvili", "zourabichvili", "kobakhidze"],
     "Kazakhstan":     ["kazakhstan", "kazakh", "kazakhs", "nur-sultan", "astana",
                        "almaty", "shymkent", "karaganda", "aktobe"],
     "Uzbekistan":     ["uzbekistan", "uzbek", "uzbeks", "tashkent",
@@ -752,8 +741,6 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Kyrgyzstan":     ["kyrgyzstan", "kyrgyz", "bishkek", "osh"],
     "Tajikistan":     ["tajikistan", "tajik", "tajiks", "dushanbe",
                        "khujand", "kulob"],
-
-    # Middle East / North Africa extras
     "Iraq":           ["iraq", "iraqi", "iraqis", "baghdad",
                        "basra", "mosul", "erbil", "najaf", "karbala", "kirkuk"],
     "Afghanistan":    ["afghanistan", "afghan", "afghans", "kabul", "taliban",
@@ -769,8 +756,6 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Qatar":          ["qatar", "qatari", "qataris", "doha"],
     "Tunisia":        ["tunisia", "tunisian", "tunisians", "tunis",
                        "sfax", "sousse", "kairouan", "bizerte"],
-
-    # Asia-Pacific extras
     "Singapore":      ["singapore", "singaporean", "singaporeans"],
     "Philippines":    ["philippines", "philippine", "filipino", "filipinos",
                        "manila", "quezon city", "caloocan", "davao", "cebu",
@@ -798,14 +783,13 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Timor-Leste":    ["timor-leste", "east timor", "timorese", "dili"],
     "Maldives":       ["maldives", "maldivian", "male"],
     "Bhutan":         ["bhutan", "bhutanese", "thimphu", "phuntsholing"],
-    "Papua New Guinea": ["papua new guinea", "papua", "port moresby",
+    # Papua New Guinea: always use full name or "PNG" — never bare "guinea" or "papua" alone
+    "Papua New Guinea": ["papua new guinea", "png", "port moresby",
                          "lae", "mount hagen"],
     "Hong Kong":      ["hong kong", "hongkonger", "hongkongers"],
-
-    # Africa extras
     "South Africa":   ["south africa", "south african", "south africans",
                        "pretoria", "johannesburg", "cape town", "durban",
-                       "soweto", "east london", "port elizabeth", "gqeberha",
+                       "soweto", "east london sa", "port elizabeth", "gqeberha",
                        "ramaphosa", "anc"],
     "Kenya":          ["kenya", "kenyan", "kenyans", "nairobi",
                        "mombasa", "kisumu", "nakuru", "eldoret", "ruto"],
@@ -834,8 +818,11 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "agadez"],
     "Chad":           ["chad", "chadian", "chadians", "n'djamena",
                        "moundou", "sarh", "abeche"],
-    "Guinea":         ["guinea conakry", "republic of guinea", "guinean", "guineans", "conakry",
-                       "nzerekore", "kindia", "kankan"],
+    # Guinea: plain "guinea" is now handled via special alias matching logic
+    # (see _alias_matches) to avoid false positives from Papua New Guinea,
+    # Equatorial Guinea, and common English phrases like "guinea pig".
+    "Guinea":         ["guinea conakry", "republic of guinea", "guinean", "guineans",
+                       "conakry", "nzerekore", "kindia", "kankan", "guinea"],
     "Angola":         ["angola", "angolan", "angolans", "luanda",
                        "huambo", "lobito", "benguela", "malanje"],
     "DRC":            ["drc", "democratic republic of the congo", "congo kinshasa",
@@ -867,8 +854,6 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
                        "francistown", "molepolole"],
     "Mali":           ["mali", "malian", "malians", "bamako",
                        "sikasso", "mopti", "koutiala", "ségou", "segou"],
-
-    # Americas extras
     "Bolivia":        ["bolivia", "bolivian", "bolivians", "sucre", "la paz",
                        "santa cruz de la sierra", "cochabamba", "el alto"],
     "Ecuador":        ["ecuador", "ecuadorian", "ecuadorians", "quito",
@@ -900,41 +885,52 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
 }
 
 
-# Aliases that are short or common enough to produce false positives if matched as
-# plain substrings.  These get word-boundary matching instead.
-# Any alias ≤ 4 chars, or a known ambiguous word, should be listed here.
+# ──────────────────────────────────────────────────────────
+# ALIAS MATCHING
+# ──────────────────────────────────────────────────────────
+
 _WORD_BOUNDARY_ALIASES: set = {
-    # Laos — "lao pdr" is used now but keep "lao" here as safety for any future re-add
     "lao",
-    # DRC abbreviation — could appear inside other acronyms
     "drc",
-    # M23 rebel group — could match e.g. "m230"
     "m23",
-    # "niger" is a strict substring of "nigeria" / "nigerian" — must use word boundary
-    # so Nigerian articles don't inflate Niger's count
     "niger",
-    # "mali" is inside "somalia" / "somali"
     "mali",
-    # "chad" is a common English first name
     "chad",
-    # "uk" — already padded in aliases ("uk ", " uk,") but keep here as guard
     "uk",
+    # "guinea" uses special Guinea-disambiguation logic below, not listed here
 }
 
+# Phrases that, if present in the article text, indicate the word "guinea"
+# refers to Papua New Guinea or Equatorial Guinea (or is a non-country usage
+# like "guinea pig" / "guinea fowl") — so we should NOT count it as Guinea (GN).
+_GUINEA_EXCLUSION_PATTERN = re.compile(
+    r'\b(papua(?:\s+new)?\s+guinea|equatorial\s+guinea|guinea[\s-]pig|guinea[\s-]fowl|'
+    r'guinea\s+worm|guinea\s+hen|new\s+guinea)\b',
+    re.IGNORECASE,
+)
 
-def _alias_matches(alias: str, text: str) -> bool:
+def _alias_matches(alias: str, text: str, country: str = "") -> bool:
     """
     Return True if alias appears in text.
 
-    Short / ambiguous aliases use word-boundary matching via regex so that
-    e.g. "bo" doesn't match inside "about" or "robot", and "niger" doesn't
-    match inside "nigeria" / "nigerian".
+    Special cases:
+      - Short / ambiguous aliases use word-boundary matching.
+      - "guinea" (bare) triggers Guinea (GN) only when the text does NOT
+        also reference Papua New Guinea, Equatorial Guinea, or non-country
+        uses like 'guinea pig' / 'guinea fowl'.
     """
-    if alias in _WORD_BOUNDARY_ALIASES:
-        # \b is a word boundary — zero-width assertion between \w and \W
-        return bool(re.search(r'\b' + re.escape(alias) + r'\b', text))
-    return alias in text
+    if alias == "guinea" and country == "Guinea":
+        # Only match if the bare word is present AND no exclusion phrase is found
+        if not re.search(r'\bguinea\b', text, re.IGNORECASE):
+            return False
+        if _GUINEA_EXCLUSION_PATTERN.search(text):
+            return False
+        return True
 
+    if alias in _WORD_BOUNDARY_ALIASES:
+        return bool(re.search(r'\b' + re.escape(alias) + r'\b', text))
+
+    return alias in text
 
 
 # ──────────────────────────────────────────────────────────
@@ -1012,6 +1008,7 @@ def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
     seen_urls: set = set()
     articles: List[dict] = []
     total_scanned = 0
+    sports_skipped = 0
 
     for source, feed_url in RSS_SOURCES.items():
         raw = fetch_text(feed_url)
@@ -1035,6 +1032,13 @@ def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
             if dt and dt < cutoff:
                 continue
 
+            title_norm = _norm(title)
+
+            # ── Sports / entertainment filter ──────────────────
+            if _is_sports_article(e, title_norm):
+                sports_skipped += 1
+                continue
+
             seen_urls.add(link)
             summary = re.sub(r"<[^>]+>", " ",
                              e.get("summary") or e.get("description") or "")
@@ -1047,6 +1051,7 @@ def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
                 "text":   _norm(combined),
             })
 
+    print(f"   → Skipped {sports_skipped} sports/entertainment articles")
     return articles, total_scanned
 
 
@@ -1055,27 +1060,17 @@ def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
 # ──────────────────────────────────────────────────────────
 
 def count_mentions(articles: List[dict]) -> Dict[str, float]:
-    """
-    Count weighted article mentions per country.
-
-    A mention from a source that is 'home' to that country
-    (e.g. BBC mentioning United Kingdom, CBC mentioning Canada)
-    counts as HOME_SOURCE_WEIGHT (0.25) rather than 1.0 to
-    reduce ambient domestic-coverage bias.  All other mentions
-    count as 1.0.  Final counts are rounded to 2 decimal places
-    so the JSON stays readable; downstream z-score math uses floats.
-    """
     counts: Dict[str, float] = {c["country"]: 0.0 for c in COUNTRIES}
     for art in articles:
         text       = art["text"]
         source     = art.get("source", "")
-        home_cntry = SOURCE_HOME_COUNTRY.get(source)   # None for US sources
+        home_cntry = SOURCE_HOME_COUNTRY.get(source)
 
         for c in COUNTRIES:
             name    = c["country"]
             aliases = COUNTRY_ALIASES.get(name, [name.lower()])
             for alias in aliases:
-                if _alias_matches(alias, text):
+                if _alias_matches(alias, text, country=name):
                     weight = HOME_SOURCE_WEIGHT if (home_cntry == name) else 1.0
                     counts[name] = round(counts[name] + weight, 2)
                     break
@@ -1108,25 +1103,10 @@ def compute_trend_status(z: float) -> str:
 
 def _cold_start_z(country: str, current: float,
                   all_counts: Dict[str, float]) -> Tuple[float, float, float, str]:
-    """
-    Hybrid z-score for when there is insufficient run history.
-
-    Combines two signals:
-      1. Seed baseline z — how far above the country's typical quiet-day level?
-      2. Relative z     — how far above THIS run's mean across all countries?
-
-    Takes the HIGHER of the two, so a country that is both way above its own
-    typical level AND dominating the current cycle (e.g. Iran during a war)
-    gets the full signal.
-
-    Returns (z, baseline_mean, baseline_std, method_label)
-    """
-    # Signal 1: against per-country seed baseline
     seed_mean = SEED_BASELINE.get(country, 3.0)
     seed_std  = _seed_std(seed_mean)
     seed_z    = (current - seed_mean) / seed_std
 
-    # Signal 2: relative within current run distribution
     run_values = [float(v) for v in all_counts.values()]
     run_mean, run_std = _mean_std(run_values)
     rel_z = (current - run_mean) / run_std if run_std > 0 else 0.0
@@ -1157,9 +1137,6 @@ def analyze(current_counts: Dict[str, float],
         history = [h for h in history
                    if _parse_iso(h.get("window_end", "")) >= cutoff_history]
 
-        # Baseline = runs from 30 days ago up to 3 days ago.
-        # Excluding the most recent 3 days prevents an ongoing news event
-        # from normalising itself into the baseline and collapsing its own z-score.
         baseline_values = [
             float(h["mentions"])
             for h in history
@@ -1176,9 +1153,6 @@ def analyze(current_counts: Dict[str, float],
             if sigma > 0:
                 z = (current - mu) / sigma
             else:
-                # std=0 means all baseline values were identical.
-                # Use a floor std of max(1.5, 20% of mean) so that small
-                # integer wobbles on low-volume countries don't falsely trend.
                 floor_std = max(1.5, mu * 0.20)
                 z = (current - mu) / floor_std
         else:
@@ -1195,7 +1169,7 @@ def analyze(current_counts: Dict[str, float],
         results.append({
             "country":          name,
             "iso2":             iso2,
-            "mentions":         round(current, 2),   # weighted (home-source bias corrected)
+            "mentions":         round(current, 2),
             "baseline_mean":    round(mu, 2),
             "baseline_std":     round(sigma, 2),
             "baseline_n":       baseline_n,
