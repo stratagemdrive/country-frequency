@@ -6,9 +6,7 @@ counts how many articles mention each tracked country,
 compares against a rolling 7-day baseline, computes z-scores,
 flags trending countries, and writes public/country_mentions.json.
 """
-
 from __future__ import annotations
-
 import json
 import re
 import time
@@ -17,16 +15,12 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
-
 import feedparser
 import requests
 from dateutil import parser as dtparser
-
-
 # ──────────────────────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────────────────────
-
 WINDOW_HOURS      = 24
 HISTORY_DAYS      = 90
 BASELINE_MIN_RUNS = 100
@@ -35,11 +29,9 @@ BASELINE_RECENCY_EXCLUDE_DAYS = 3
 TRENDING_Z        = 2.0
 ELEVATED_Z        = 1.0
 LOW_Z             = -1.0
-
 TIMEOUT     = 20
 MAX_RETRIES = 3
 RETRY_SLEEP = 1.2
-
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS 10_15_7) "
@@ -49,12 +41,9 @@ HEADERS = {
     "Accept": "application/rss+xml, application/xml, text/xml, */*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
 }
-
 OUTPUT_DIR  = Path("public")
 OUTPUT_FILE = OUTPUT_DIR / "country_mentions.json"
-
 HOME_SOURCE_WEIGHT: float = 0.25
-
 SOURCE_HOME_COUNTRY: Dict[str, str] = {
     "BBC World":       "United Kingdom",
     "The Guardian":    "United Kingdom",
@@ -70,14 +59,9 @@ SOURCE_HOME_COUNTRY: Dict[str, str] = {
     "Toronto Star":    "Canada",
     "CTV News":        "Canada",
 }
-
-
 # ──────────────────────────────────────────────────────────
 # SPORTS / ENTERTAINMENT FILTER
 # ──────────────────────────────────────────────────────────
-
-# RSS feed tag/category values that identify non-news content.
-# feedparser normalises tags into entry.tags[n].term (lowercased where possible).
 SKIP_CATEGORIES: set = {
     "sport", "sports", "football", "soccer", "rugby", "cricket",
     "tennis", "golf", "athletics", "cycling", "motorsport", "f1",
@@ -85,18 +69,11 @@ SKIP_CATEGORIES: set = {
     "entertainment", "lifestyle", "culture", "showbiz",
     "film", "music", "celebrity",
 }
-
-# Title-level sports/entertainment keyword filter.
-# If ANY of these appear in the article title (word-boundary matched),
-# the article is skipped entirely before mention counting.
-# Kept deliberately tight — only terms that are unambiguously non-geopolitical.
 SPORTS_TITLE_KEYWORDS: set = {
-    # Generic match/game terms
     "match", "fixture", "kickoff", "kick-off", "full-time", "half-time",
     "penalty shootout", "extra time", "replay", "friendly",
     "qualifier", "qualifiers", "knockout", "semifinal", "semi-final",
     "final score", "scoreline",
-    # Competitions / tournaments
     "world cup", "afcon", "africa cup of nations",
     "champions league", "europa league", "premier league",
     "bundesliga", "serie a", "la liga", "ligue 1",
@@ -105,20 +82,16 @@ SPORTS_TITLE_KEYWORDS: set = {
     "grand prix", "formula one", "formula 1",
     "olympic", "olympics", "paralympic",
     "wimbledon", "us open", "australian open", "french open", "roland garros",
-    # South Africa specific sports signals
     "springboks", "springbok",
     "bafana bafana", "bafana",
     "proteas",
     "supersport", "super sport",
-    # Serbia / Balkans sports signals
     "djokovic", "novak",
-    # Other common high-false-positive athletes/teams by country
     "messi", "ronaldo", "mbappé", "mbappe",
-    "lewandowski",                          # Poland
-    "salah",                                # Egypt
-    "son heung", "son heung-min",           # South Korea
-    "kane", "bellingham", "saka",           # England (UK)
-    # General sports section markers
+    "lewandowski",
+    "salah",
+    "son heung", "son heung-min",
+    "kane", "bellingham", "saka",
     "transfer window", "transfer fee", "signing fee",
     "manager sacked", "head coach sacked", "appointed manager",
     "locker room", "dressing room",
@@ -126,38 +99,21 @@ SPORTS_TITLE_KEYWORDS: set = {
     "batting", "bowling", "wicket", "innings",
     "try scored", "converted try",
 }
-
-# Compile a single regex for fast title matching (word-boundary where helpful)
 _SPORTS_PATTERN = re.compile(
     r'\b(' + '|'.join(re.escape(kw) for kw in SPORTS_TITLE_KEYWORDS) + r')\b',
     re.IGNORECASE,
 )
-
 def _is_sports_article(entry: dict, title_norm: str) -> bool:
-    """
-    Return True if the article should be skipped as sports/entertainment content.
-
-    Checks:
-      1. feedparser tag/category fields against SKIP_CATEGORIES
-      2. Title against SPORTS_TITLE_KEYWORDS regex
-    """
-    # 1. Category tags
     for tag in entry.get("tags", []):
         term = (tag.get("term") or tag.get("label") or "").lower().strip()
         if term in SKIP_CATEGORIES:
             return True
-
-    # 2. Title keyword match
     if _SPORTS_PATTERN.search(title_norm):
         return True
-
     return False
-
-
 # ──────────────────────────────────────────────────────────
 # SEED BASELINE
 # ──────────────────────────────────────────────────────────
-
 SEED_BASELINE: Dict[str, float] = {
     "Russia":         25.0,
     "China":          20.0,
@@ -320,15 +276,11 @@ SEED_BASELINE: Dict[str, float] = {
     "Trinidad and Tobago": 1.5,
     "Jamaica":         2.0,
 }
-
 def _seed_std(mean: float) -> float:
     return max(1.5, mean * 0.6)
-
-
 # ──────────────────────────────────────────────────────────
 # RSS SOURCES
 # ──────────────────────────────────────────────────────────
-
 RSS_SOURCES: Dict[str, str] = {
     "AP News":             "https://rsshub.app/apnews/topics/ap-top-news",
     "Reuters":             "https://feeds.reuters.com/reuters/topNews",
@@ -361,12 +313,9 @@ RSS_SOURCES: Dict[str, str] = {
     "Toronto Star":        "https://www.thestar.com/content/thestar/feed.rss",
     "CTV News":            "https://www.ctvnews.ca/rss/ctvnews-ca-world-public-rss-1.822289",
 }
-
-
 # ──────────────────────────────────────────────────────────
 # TRACKED COUNTRIES
 # ──────────────────────────────────────────────────────────
-
 COUNTRIES = [
     {"country": "Russia",         "iso2": "RU"},
     {"country": "India",          "iso2": "IN"},
@@ -529,12 +478,9 @@ COUNTRIES = [
     {"country": "Jamaica",        "iso2": "JM"},
     {"country": "Bahamas",        "iso2": "BS"},
 ]
-
-
 # ──────────────────────────────────────────────────────────
 # COUNTRY ALIASES
 # ──────────────────────────────────────────────────────────
-
 COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Russia":         ["russia", "russian", "russians", "moscow", "kremlin", "putin",
                        "saint petersburg", "st. petersburg", "novosibirsk", "yekaterinburg",
@@ -684,569 +630,4 @@ COUNTRY_ALIASES: Dict[str, List[str]] = {
     "Finland":        ["finland", "finnish", "finns", "helsinki",
                        "espoo", "tampere", "vantaa", "oulu", "turku"],
     "Switzerland":    ["switzerland", "swiss", "bern", "zurich",
-                       "geneva", "basel", "lausanne", "winterthur"],
-    "Austria":        ["austria", "austrian", "austrians", "vienna",
-                       "graz", "linz", "salzburg", "innsbruck"],
-    "Hungary":        ["hungary", "hungarian", "hungarians", "budapest", "orban",
-                       "debrecen", "miskolc", "pecs", "gyor"],
-    "Ireland":        ["ireland", "irish", "dublin", "varadkar", "harris",
-                       "cork", "limerick", "galway", "waterford"],
-    "Greece":         ["greece", "greek", "greeks", "athens", "mitsotakis",
-                       "thessaloniki", "patras", "heraklion", "larissa"],
-    "Luxembourg":     ["luxembourg", "luxembourgish", "luxembourg city"],
-    "Iceland":        ["iceland", "icelandic", "icelanders", "reykjavik"],
-    "Malta":          ["malta", "maltese", "valletta"],
-    "Cyprus":         ["cyprus", "cypriot", "cypriots", "nicosia", "limassol"],
-    "Belarus":        ["belarus", "belarusian", "belarusians", "minsk", "lukashenko",
-                       "brest", "grodno", "gomel", "mogilev", "vitebsk"],
-    "Serbia":         ["serbia", "serbian", "serbians", "belgrade", "vucic",
-                       "novi sad", "nis", "kragujevac", "subotica"],
-    "Albania":        ["albania", "albanian", "albanians", "tirana",
-                       "durres", "shkoder", "vlore", "elbasan"],
-    "Bulgaria":       ["bulgaria", "bulgarian", "bulgarians", "sofia",
-                       "plovdiv", "varna", "burgas", "stara zagora"],
-    "Moldova":        ["moldova", "moldovan", "moldovans", "chisinau",
-                       "tiraspol", "balti"],
-    "Kosovo":         ["kosovo", "kosovar", "kosovars", "pristina"],
-    "North Macedonia": ["north macedonia", "macedonian", "macedonians", "skopje",
-                        "bitola", "kumanovo", "tetovo"],
-    "Bosnia":         ["bosnia", "bosnian", "bosnians", "bosnia and herzegovina",
-                       "sarajevo", "banja luka", "mostar", "tuzla"],
-    "Montenegro":     ["montenegro", "montenegrin", "podgorica"],
-    "Croatia":        ["croatia", "croatian", "croatians", "zagreb",
-                       "split", "rijeka", "osijek", "zadar", "dubrovnik"],
-    "Slovakia":       ["slovakia", "slovak", "slovaks", "bratislava",
-                       "kosice", "presov", "zilina", "nitra"],
-    "Slovenia":       ["slovenia", "slovenian", "slovenians", "ljubljana",
-                       "maribor", "celje", "kranj"],
-    "Lithuania":      ["lithuania", "lithuanian", "lithuanians", "vilnius",
-                       "kaunas", "klaipeda", "siauliai", "panevezys"],
-    "Latvia":         ["latvia", "latvian", "latvians", "riga",
-                       "daugavpils", "liepaja", "jelgava"],
-    "Estonia":        ["estonia", "estonian", "estonians", "tallinn",
-                       "tartu", "narva", "parnu"],
-    # ── Georgia: city/leader names only — no bare "georgia" which hits the US state ──
-    # Tbilisi, Kutaisi, Batumi are unambiguous; "georgian" is matched only when
-    # it cannot refer to the architectural/historical style (rare in news context).
-    "Georgia":        ["tbilisi", "kutaisi", "batumi", "rustavi",
-                       "georgian dream", "georgian government", "georgian president",
-                       "georgian prime minister", "georgian parliament",
-                       "georgian opposition", "georgian protests",
-                       "ivanishvili", "zourabichvili", "kobakhidze"],
-    "Kazakhstan":     ["kazakhstan", "kazakh", "kazakhs", "nur-sultan", "astana",
-                       "almaty", "shymkent", "karaganda", "aktobe"],
-    "Uzbekistan":     ["uzbekistan", "uzbek", "uzbeks", "tashkent",
-                       "samarkand", "namangan", "andijan", "bukhara"],
-    "Turkmenistan":   ["turkmenistan", "turkmen", "ashgabat"],
-    "Kyrgyzstan":     ["kyrgyzstan", "kyrgyz", "bishkek", "osh"],
-    "Tajikistan":     ["tajikistan", "tajik", "tajiks", "dushanbe",
-                       "khujand", "kulob"],
-    "Iraq":           ["iraq", "iraqi", "iraqis", "baghdad",
-                       "basra", "mosul", "erbil", "najaf", "karbala", "kirkuk"],
-    "Afghanistan":    ["afghanistan", "afghan", "afghans", "kabul", "taliban",
-                       "kandahar", "herat", "mazar-i-sharif", "jalalabad"],
-    "Jordan":         ["jordan", "jordanian", "jordanians", "amman",
-                       "zarqa", "irbid", "aqaba"],
-    "Lebanon":        ["lebanon", "lebanese", "beirut", "hezbollah",
-                       "tripoli lebanon", "sidon", "tyre"],
-    "Kuwait":         ["kuwait", "kuwaiti", "kuwaitis", "kuwait city"],
-    "Bahrain":        ["bahrain", "bahraini", "bahrainis", "manama"],
-    "Oman":           ["oman", "omani", "omanis", "muscat",
-                       "salalah", "sohar", "nizwa"],
-    "Qatar":          ["qatar", "qatari", "qataris", "doha"],
-    "Tunisia":        ["tunisia", "tunisian", "tunisians", "tunis",
-                       "sfax", "sousse", "kairouan", "bizerte"],
-    "Singapore":      ["singapore", "singaporean", "singaporeans"],
-    "Philippines":    ["philippines", "philippine", "filipino", "filipinos",
-                       "manila", "quezon city", "caloocan", "davao", "cebu",
-                       "zamboanga", "antipolo", "pasig", "taguig", "marcos",
-                       "duterte"],
-    "Malaysia":       ["malaysia", "malaysian", "malaysians", "kuala lumpur",
-                       "george town", "johor bahru", "ipoh", "shah alam",
-                       "petaling jaya", "kota kinabalu"],
-    "Thailand":       ["thailand", "thai", "thais", "bangkok",
-                       "chiang mai", "pattaya", "nonthaburi", "hat yai",
-                       "udon thani", "phuket"],
-    "Cambodia":       ["cambodia", "cambodian", "cambodians", "phnom penh",
-                       "siem reap", "sihanoukville"],
-    "Laos":           ["laos", "laotian", "laotians", "lao pdr", "vientiane",
-                       "luang prabang", "pakse"],
-    "Bangladesh":     ["bangladesh", "bangladeshi", "bangladeshis", "dhaka",
-                       "chittagong", "sylhet", "rajshahi", "khulna", "mymensingh"],
-    "Nepal":          ["nepal", "nepali", "nepalese", "kathmandu",
-                       "pokhara", "patan", "biratnagar"],
-    "Sri Lanka":      ["sri lanka", "sri lankan", "colombo", "kandy",
-                       "galle", "jaffna", "batticaloa"],
-    "Mongolia":       ["mongolia", "mongolian", "mongolians", "ulaanbaatar",
-                       "erdenet", "darkhan"],
-    "Brunei":         ["brunei", "bruneian", "bandar seri begawan"],
-    "Timor-Leste":    ["timor-leste", "east timor", "timorese", "dili"],
-    "Maldives":       ["maldives", "maldivian", "male"],
-    "Bhutan":         ["bhutan", "bhutanese", "thimphu", "phuntsholing"],
-    # Papua New Guinea: always use full name or "PNG" — never bare "guinea" or "papua" alone
-    "Papua New Guinea": ["papua new guinea", "png", "port moresby",
-                         "lae", "mount hagen"],
-    "Hong Kong":      ["hong kong", "hongkonger", "hongkongers"],
-    "South Africa":   ["south africa", "south african", "south africans",
-                       "pretoria", "johannesburg", "cape town", "durban",
-                       "soweto", "east london sa", "port elizabeth", "gqeberha",
-                       "ramaphosa", "anc"],
-    "Kenya":          ["kenya", "kenyan", "kenyans", "nairobi",
-                       "mombasa", "kisumu", "nakuru", "eldoret", "ruto"],
-    "Ethiopia":       ["ethiopia", "ethiopian", "ethiopians", "addis ababa",
-                       "dire dawa", "gondar", "mekele", "bahir dar", "abiy"],
-    "Ghana":          ["ghana", "ghanaian", "ghanaians", "accra",
-                       "kumasi", "tamale", "sekondi", "takoradi"],
-    "Ivory Coast":    ["ivory coast", "ivorian", "ivorians", "cote d'ivoire",
-                       "cote divoire", "abidjan", "yamoussoukro", "bouake"],
-    "Senegal":        ["senegal", "senegalese", "dakar", "touba", "thies"],
-    "Rwanda":         ["rwanda", "rwandan", "rwandans", "kigali",
-                       "butare", "gitarama"],
-    "Uganda":         ["uganda", "ugandan", "ugandans", "kampala",
-                       "gulu", "lira", "mbarara", "jinja", "museveni"],
-    "Zimbabwe":       ["zimbabwe", "zimbabwean", "zimbabweans", "harare",
-                       "bulawayo", "chitungwiza", "mutare", "mnangagwa"],
-    "Zambia":         ["zambia", "zambian", "zambians", "lusaka",
-                       "kitwe", "ndola", "kabwe", "chingola"],
-    "Cameroon":       ["cameroon", "cameroonian", "cameroonians", "yaounde",
-                       "douala", "garoua", "bamenda", "maroua"],
-    "Mozambique":     ["mozambique", "mozambican", "mozambicans", "maputo",
-                       "matola", "nampula", "beira", "nacala"],
-    "Burkina Faso":   ["burkina faso", "burkinabe", "ouagadougou",
-                       "bobo-dioulasso", "koudougou", "traore"],
-    "Niger":          ["niger", "nigerien", "niamey", "zinder", "maradi",
-                       "agadez"],
-    "Chad":           ["chad", "chadian", "chadians", "n'djamena",
-                       "moundou", "sarh", "abeche"],
-    # Guinea: plain "guinea" is now handled via special alias matching logic
-    # (see _alias_matches) to avoid false positives from Papua New Guinea,
-    # Equatorial Guinea, and common English phrases like "guinea pig".
-    "Guinea":         ["guinea conakry", "republic of guinea", "guinean", "guineans",
-                       "conakry", "nzerekore", "kindia", "kankan", "guinea"],
-    "Angola":         ["angola", "angolan", "angolans", "luanda",
-                       "huambo", "lobito", "benguela", "malanje"],
-    "DRC":            ["drc", "democratic republic of the congo", "congo kinshasa",
-                       "kinshasa", "lubumbashi", "mbuji-mayi", "goma", "bukavu",
-                       "m23", "eastern congo"],
-    "South Sudan":    ["south sudan", "south sudanese", "juba",
-                       "wau", "malakal", "yei"],
-    "Eritrea":        ["eritrea", "eritrean", "eritreans", "asmara"],
-    "Djibouti":       ["djibouti", "djiboutian"],
-    "Mauritania":     ["mauritania", "mauritanian", "mauritanians", "nouakchott",
-                       "nouadhibou"],
-    "Liberia":        ["liberia", "liberian", "liberians", "monrovia"],
-    "Sierra Leone":   ["sierra leone", "sierra leonean", "freetown",
-                       "kenema", "makeni"],
-    "Gabon":          ["gabon", "gabonese", "libreville", "port-gentil"],
-    "Congo":          ["republic of the congo", "congo brazzaville",
-                       "brazzaville", "pointe-noire"],
-    "Namibia":        ["namibia", "namibian", "namibians", "windhoek",
-                       "rundu", "walvis bay"],
-    "Eswatini":       ["eswatini", "swazi", "swazis", "mbabane", "manzini"],
-    "Lesotho":        ["lesotho", "basotho", "maseru"],
-    "Malawi":         ["malawi", "malawian", "malawians", "lilongwe",
-                       "blantyre", "mzuzu"],
-    "Tanzania":       ["tanzania", "tanzanian", "tanzanians", "dodoma",
-                       "dar es salaam", "mwanza", "arusha", "zanzibar"],
-    "Madagascar":     ["madagascar", "malagasy", "antananarivo",
-                       "toamasina", "antsirabe", "fianarantsoa"],
-    "Botswana":       ["botswana", "batswana", "gaborone",
-                       "francistown", "molepolole"],
-    "Mali":           ["mali", "malian", "malians", "bamako",
-                       "sikasso", "mopti", "koutiala", "ségou", "segou"],
-    "Bolivia":        ["bolivia", "bolivian", "bolivians", "sucre", "la paz",
-                       "santa cruz de la sierra", "cochabamba", "el alto"],
-    "Ecuador":        ["ecuador", "ecuadorian", "ecuadorians", "quito",
-                       "guayaquil", "cuenca", "santo domingo", "noboa"],
-    "Paraguay":       ["paraguay", "paraguayan", "paraguayans", "asuncion",
-                       "ciudad del este", "san lorenzo"],
-    "Uruguay":        ["uruguay", "uruguayan", "uruguayans", "montevideo",
-                       "salto", "ciudad de la costa"],
-    "Guyana":         ["guyana", "guyanese", "georgetown guyana",
-                       "linden", "new amsterdam"],
-    "Dominican Republic": ["dominican republic", "dominican", "dominicans",
-                           "santo domingo", "santiago dominican"],
-    "Haiti":          ["haiti", "haitian", "haitians", "port-au-prince",
-                       "cap-haïtien", "cap haitien", "gonaives"],
-    "Guatemala":      ["guatemala", "guatemalan", "guatemalans", "guatemala city",
-                       "mixco", "villa nueva", "quetzaltenango"],
-    "Honduras":       ["honduras", "honduran", "hondurans", "tegucigalpa",
-                       "san pedro sula", "choloma"],
-    "Nicaragua":      ["nicaragua", "nicaraguan", "nicaraguans", "managua",
-                       "leon nicaragua", "masaya", "ortega"],
-    "Costa Rica":     ["costa rica", "costa rican", "costa ricans", "san jose costa rica",
-                       "alajuela", "cartago"],
-    "Trinidad and Tobago": ["trinidad and tobago", "trinidadian", "trinidadians",
-                            "tobagonian", "port of spain", "san fernando"],
-    "Jamaica":        ["jamaica", "jamaican", "jamaicans", "kingston jamaica",
-                       "montego bay", "portmore"],
-    "Bahamas":        ["bahamas", "bahamian", "bahamians", "nassau bahamas",
-                       "freeport bahamas"],
-}
-
-
-# ──────────────────────────────────────────────────────────
-# ALIAS MATCHING
-# ──────────────────────────────────────────────────────────
-
-_WORD_BOUNDARY_ALIASES: set = {
-    "lao",
-    "drc",
-    "m23",
-    "niger",
-    "mali",
-    "chad",
-    "uk",
-    # "guinea" uses special Guinea-disambiguation logic below, not listed here
-}
-
-# Phrases that, if present in the article text, indicate the word "guinea"
-# refers to Papua New Guinea or Equatorial Guinea (or is a non-country usage
-# like "guinea pig" / "guinea fowl") — so we should NOT count it as Guinea (GN).
-_GUINEA_EXCLUSION_PATTERN = re.compile(
-    r'\b(papua(?:\s+new)?\s+guinea|equatorial\s+guinea|guinea[\s-]pig|guinea[\s-]fowl|'
-    r'guinea\s+worm|guinea\s+hen|new\s+guinea)\b',
-    re.IGNORECASE,
-)
-
-def _alias_matches(alias: str, text: str, country: str = "") -> bool:
-    """
-    Return True if alias appears in text.
-
-    Special cases:
-      - Short / ambiguous aliases use word-boundary matching.
-      - "guinea" (bare) triggers Guinea (GN) only when the text does NOT
-        also reference Papua New Guinea, Equatorial Guinea, or non-country
-        uses like 'guinea pig' / 'guinea fowl'.
-    """
-    if alias == "guinea" and country == "Guinea":
-        # Only match if the bare word is present AND no exclusion phrase is found
-        if not re.search(r'\bguinea\b', text, re.IGNORECASE):
-            return False
-        if _GUINEA_EXCLUSION_PATTERN.search(text):
-            return False
-        return True
-
-    if alias in _WORD_BOUNDARY_ALIASES:
-        return bool(re.search(r'\b' + re.escape(alias) + r'\b', text))
-
-    return alias in text
-
-
-# ──────────────────────────────────────────────────────────
-# HELPERS
-# ──────────────────────────────────────────────────────────
-
-def _norm(s: str) -> str:
-    return " ".join((s or "").lower().split())
-
-def fetch_text(url: str) -> Optional[str]:
-    sess = requests.Session()
-    sess.headers.update(HEADERS)
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            r = sess.get(url, timeout=TIMEOUT, allow_redirects=True)
-            if r.status_code == 200 and r.text:
-                return r.text
-        except requests.RequestException:
-            pass
-        time.sleep(RETRY_SLEEP * attempt)
-    return None
-
-def parse_dt(entry: dict) -> Optional[datetime]:
-    for k in ("published_parsed", "updated_parsed", "created_parsed"):
-        st = entry.get(k)
-        if st:
-            try:
-                return datetime(*st[:6], tzinfo=timezone.utc)
-            except Exception:
-                pass
-    for k in ("published", "updated", "created"):
-        v = entry.get(k)
-        if v:
-            try:
-                dt = dtparser.parse(v)
-                if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=timezone.utc)
-                return dt.astimezone(timezone.utc)
-            except Exception:
-                continue
-    return None
-
-def canonicalize_url(url: str) -> str:
-    try:
-        u = urlparse(url)
-        qs = parse_qs(u.query, keep_blank_values=True)
-        drop = {"utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
-                "fbclid", "gclid", "mc_cid", "mc_eid"}
-        for p in list(qs.keys()):
-            if p.lower() in drop:
-                qs.pop(p, None)
-        new_q = urlencode({k: v[0] for k, v in qs.items() if v})
-        path = u.path or ""
-        if path != "/" and path.endswith("/"):
-            path = path[:-1]
-        return urlunparse((u.scheme, u.netloc, path, u.params, new_q, ""))
-    except Exception:
-        return url
-
-def _parse_iso(s: str) -> datetime:
-    try:
-        return dtparser.parse(s).astimezone(timezone.utc)
-    except Exception:
-        return datetime.min.replace(tzinfo=timezone.utc)
-
-
-# ──────────────────────────────────────────────────────────
-# RSS FETCHING
-# ──────────────────────────────────────────────────────────
-
-def fetch_articles(window_hours: int) -> Tuple[List[dict], int]:
-    now    = datetime.now(timezone.utc)
-    cutoff = now - timedelta(hours=window_hours)
-
-    seen_urls: set = set()
-    articles: List[dict] = []
-    total_scanned = 0
-    sports_skipped = 0
-
-    for source, feed_url in RSS_SOURCES.items():
-        raw = fetch_text(feed_url)
-        if not raw:
-            print(f"  ⚠  Could not fetch: {source}")
-            continue
-
-        d = feedparser.parse(raw)
-        entries = getattr(d, "entries", [])
-        total_scanned += len(entries)
-
-        for e in entries:
-            title = (e.get("title") or "").strip()
-            link  = canonicalize_url((e.get("link") or "").strip())
-            if not title or not link:
-                continue
-            if link in seen_urls:
-                continue
-
-            dt = parse_dt(e)
-            if dt and dt < cutoff:
-                continue
-
-            title_norm = _norm(title)
-
-            # ── Sports / entertainment filter ──────────────────
-            if _is_sports_article(e, title_norm):
-                sports_skipped += 1
-                continue
-
-            seen_urls.add(link)
-            summary = re.sub(r"<[^>]+>", " ",
-                             e.get("summary") or e.get("description") or "")
-            combined = f"{title} {summary}"
-
-            articles.append({
-                "title":  title,
-                "url":    link,
-                "source": source,
-                "text":   _norm(combined),
-            })
-
-    print(f"   → Skipped {sports_skipped} sports/entertainment articles")
-    return articles, total_scanned
-
-
-# ──────────────────────────────────────────────────────────
-# MENTION COUNTING
-# ──────────────────────────────────────────────────────────
-
-def count_mentions(articles: List[dict]) -> Dict[str, float]:
-    counts: Dict[str, float] = {c["country"]: 0.0 for c in COUNTRIES}
-    for art in articles:
-        text       = art["text"]
-        source     = art.get("source", "")
-        home_cntry = SOURCE_HOME_COUNTRY.get(source)
-
-        for c in COUNTRIES:
-            name    = c["country"]
-            aliases = COUNTRY_ALIASES.get(name, [name.lower()])
-            for alias in aliases:
-                if _alias_matches(alias, text, country=name):
-                    weight = HOME_SOURCE_WEIGHT if (home_cntry == name) else 1.0
-                    counts[name] = round(counts[name] + weight, 2)
-                    break
-
-    return counts
-
-
-# ──────────────────────────────────────────────────────────
-# STATISTICAL ANALYSIS
-# ──────────────────────────────────────────────────────────
-
-def _mean_std(values: List[float]) -> Tuple[float, float]:
-    if not values:
-        return 0.0, 0.0
-    n  = len(values)
-    mu = sum(values) / n
-    if n < 2:
-        return mu, 0.0
-    var = sum((x - mu) ** 2 for x in values) / (n - 1)
-    return mu, math.sqrt(var)
-
-def compute_trend_status(z: float) -> str:
-    if z >= TRENDING_Z:
-        return "trending"
-    if z >= ELEVATED_Z:
-        return "elevated"
-    if z <= LOW_Z:
-        return "low"
-    return "normal"
-
-def _cold_start_z(country: str, current: float,
-                  all_counts: Dict[str, float]) -> Tuple[float, float, float, str]:
-    seed_mean = SEED_BASELINE.get(country, 3.0)
-    seed_std  = _seed_std(seed_mean)
-    seed_z    = (current - seed_mean) / seed_std
-
-    run_values = [float(v) for v in all_counts.values()]
-    run_mean, run_std = _mean_std(run_values)
-    rel_z = (current - run_mean) / run_std if run_std > 0 else 0.0
-
-    z = max(seed_z, rel_z)
-    return z, seed_mean, seed_std, "cold_start_hybrid"
-
-
-def analyze(current_counts: Dict[str, float],
-            existing_data: dict,
-            window_end: datetime) -> List[dict]:
-    existing_map: Dict[str, dict] = {}
-    for c in existing_data.get("countries", []):
-        existing_map[c["country"]] = c
-
-    results: List[dict] = []
-    cutoff_history        = window_end - timedelta(days=HISTORY_DAYS)
-    baseline_window_start = window_end - timedelta(days=BASELINE_DAYS)
-    recency_cutoff        = window_end - timedelta(days=BASELINE_RECENCY_EXCLUDE_DAYS)
-
-    for c in COUNTRIES:
-        name    = c["country"]
-        iso2    = c["iso2"]
-        current = current_counts.get(name, 0)
-
-        old     = existing_map.get(name, {})
-        history = old.get("history", [])
-        history = [h for h in history
-                   if _parse_iso(h.get("window_end", "")) >= cutoff_history]
-
-        baseline_values = [
-            float(h["mentions"])
-            for h in history
-            if baseline_window_start
-               <= _parse_iso(h.get("window_end", ""))
-               < recency_cutoff
-        ]
-
-        mu, sigma  = _mean_std(baseline_values)
-        baseline_n = len(baseline_values)
-        method     = "rolling_30d_excl3"
-
-        if baseline_n >= BASELINE_MIN_RUNS:
-            if sigma > 0:
-                z = (current - mu) / sigma
-            else:
-                floor_std = max(1.5, mu * 0.20)
-                z = (current - mu) / floor_std
-        else:
-            z, mu, sigma, method = _cold_start_z(name, current, current_counts)
-
-        trend_status = compute_trend_status(z)
-        pct_change   = (round((current - mu) / mu * 100, 1) if mu > 0 else None)
-
-        history.append({
-            "window_end": window_end.isoformat().replace("+00:00", "Z"),
-            "mentions":   current,
-        })
-
-        results.append({
-            "country":          name,
-            "iso2":             iso2,
-            "mentions":         round(current, 2),
-            "baseline_mean":    round(mu, 2),
-            "baseline_std":     round(sigma, 2),
-            "baseline_n":       baseline_n,
-            "baseline_method":  method,
-            "z_score":          round(z, 3),
-            "trend_status":     trend_status,
-            "pct_change":       pct_change,
-            "history":          history,
-        })
-
-    results.sort(key=lambda x: x["mentions"], reverse=True)
-    return results
-
-
-# ──────────────────────────────────────────────────────────
-# MAIN
-# ──────────────────────────────────────────────────────────
-
-def main():
-    now          = datetime.now(timezone.utc)
-    window_end   = now
-    window_start = now - timedelta(hours=WINDOW_HOURS)
-
-    print(f"🔍 Scanning {window_start.isoformat()} → {window_end.isoformat()}")
-
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    existing_data: dict = {}
-    if OUTPUT_FILE.exists():
-        try:
-            existing_data = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
-            n = len(existing_data.get("countries", []))
-            print(f"📂 Loaded existing data ({n} countries in history)")
-        except Exception as e:
-            print(f"⚠  Could not parse existing JSON: {e}")
-
-    print("📡 Fetching RSS feeds…")
-    articles, total_scanned = fetch_articles(WINDOW_HOURS)
-    print(f"   → {len(articles)} unique articles in window (scanned {total_scanned} entries)")
-
-    print("🔢 Counting country mentions…")
-    counts = count_mentions(articles)
-
-    top = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:10]
-    for name, n in top:
-        print(f"   {n:6.1f}  {name}")
-
-    print("📊 Computing z-scores and trend status…")
-    country_results = analyze(counts, existing_data, window_end)
-
-    trending = [c for c in country_results if c["trend_status"] == "trending"]
-    elevated = [c for c in country_results if c["trend_status"] == "elevated"]
-    if trending:
-        print(f"🔥 Trending:  {', '.join(c['country'] for c in trending)}")
-    if elevated:
-        print(f"📈 Elevated:  {', '.join(c['country'] for c in elevated)}")
-
-    output = {
-        "meta": {
-            "generated_at":         window_end.isoformat().replace("+00:00", "Z"),
-            "window_start":         window_start.isoformat().replace("+00:00", "Z"),
-            "window_end":           window_end.isoformat().replace("+00:00", "Z"),
-            "window_hours":         WINDOW_HOURS,
-            "articles_scanned":     total_scanned,
-            "articles_in_window":   len(articles),
-            "sources_count":        len(RSS_SOURCES),
-            "trending_threshold_z": TRENDING_Z,
-            "elevated_threshold_z": ELEVATED_Z,
-        },
-        "countries": country_results,
-    }
-
-    OUTPUT_FILE.write_text(
-        json.dumps(output, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    print(f"✅ Wrote {len(country_results)} countries → {OUTPUT_FILE.resolve()}")
-
-
-if __name__ == "__main__":
-    main()
+                       "geneva", "basel", "lausanne", "winter
