@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-08-16T02:57:30.824185Z",
-    "window_start": "2026-08-15T02:57:30.824185Z",
-    "window_end": "2026-08-16T02:57:30.824185Z",
+    "generated_at": "2026-08-16T03:50:25.502545Z",
+    "window_start": "2026-08-15T03:50:25.502545Z",
+    "window_end": "2026-08-16T03:50:25.502545Z",
     "window_hours": 24,
     "articles_scanned": 1090,
     "articles_in_window": 237,
@@ -23,10 +23,6 @@
       "trend_status": "normal",
       "pct_change": -31.6,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 25.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 31.0
@@ -3686,25 +3682,25 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 26.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 26.0
         }
       ]
     },
     {
       "country": "Indonesia",
       "iso2": "ID",
-      "mentions": 15.0,
+      "mentions": 16.0,
       "baseline_mean": 1.3,
       "baseline_std": 1.32,
       "baseline_n": 338,
       "baseline_method": "rolling_30d_excl3",
-      "z_score": 10.377,
+      "z_score": 11.135,
       "trend_status": "trending",
-      "pct_change": 1052.3,
+      "pct_change": 1129.1,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -7364,6 +7360,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 15.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 16.0
         }
       ]
     },
@@ -7379,10 +7379,6 @@
       "trend_status": "normal",
       "pct_change": 6.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 12.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 10.0
@@ -11042,6 +11038,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 14.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 14.0
         }
       ]
     },
@@ -11057,10 +11057,6 @@
       "trend_status": "trending",
       "pct_change": 501.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -14720,6 +14716,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 12.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 12.0
         }
       ]
     },
@@ -14735,10 +14735,6 @@
       "trend_status": "low",
       "pct_change": -40.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 16.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 17.0
@@ -18398,6 +18394,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 10.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 10.0
         }
       ]
     },
@@ -18413,10 +18413,6 @@
       "trend_status": "normal",
       "pct_change": 1.2,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 9.25
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 9.0
@@ -22076,6 +22072,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 9.25
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 9.25
         }
       ]
     },
@@ -22091,10 +22091,6 @@
       "trend_status": "normal",
       "pct_change": -20.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -25754,6 +25750,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 9.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 9.0
         }
       ]
     },
@@ -25769,10 +25769,6 @@
       "trend_status": "normal",
       "pct_change": 91.2,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -29432,6 +29428,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 8.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 8.0
         }
       ]
     },
@@ -29447,10 +29447,6 @@
       "trend_status": "low",
       "pct_change": -48.9,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 18.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 19.0
@@ -33110,6 +33106,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 8.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 8.0
         }
       ]
     },
@@ -33125,10 +33125,6 @@
       "trend_status": "normal",
       "pct_change": -25.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 2.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 3.0
@@ -36788,6 +36784,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 7.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 7.0
         }
       ]
     },
@@ -36803,10 +36803,6 @@
       "trend_status": "normal",
       "pct_change": 14.6,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 6.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 6.0
@@ -40466,6 +40462,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 7.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 7.0
         }
       ]
     },
@@ -40481,10 +40481,6 @@
       "trend_status": "normal",
       "pct_change": -19.1,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 4.5
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 3.5
@@ -44144,6 +44140,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 6.75
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 6.75
         }
       ]
     },
@@ -44159,10 +44159,6 @@
       "trend_status": "normal",
       "pct_change": -43.7,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 9.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 8.0
@@ -47822,6 +47818,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 6.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 6.0
         }
       ]
     },
@@ -47837,10 +47837,6 @@
       "trend_status": "normal",
       "pct_change": -15.5,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 5.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 6.0
@@ -51500,6 +51496,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 5.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 5.0
         }
       ]
     },
@@ -51515,10 +51515,6 @@
       "trend_status": "normal",
       "pct_change": -58.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 2.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 4.0
@@ -55178,6 +55174,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 5.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 5.0
         }
       ]
     },
@@ -55193,10 +55193,6 @@
       "trend_status": "trending",
       "pct_change": 1464.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -58856,6 +58852,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 5.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 5.0
         }
       ]
     },
@@ -58871,10 +58871,6 @@
       "trend_status": "normal",
       "pct_change": -45.1,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 2.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
@@ -62534,6 +62530,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 4.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 4.0
         }
       ]
     },
@@ -62549,10 +62549,6 @@
       "trend_status": "normal",
       "pct_change": -36.7,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 3.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 6.0
@@ -66212,6 +66208,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 4.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 4.0
         }
       ]
     },
@@ -66227,10 +66227,6 @@
       "trend_status": "trending",
       "pct_change": 404.5,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -69889,6 +69885,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 4.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 4.0
         }
       ]
@@ -69906,10 +69906,6 @@
       "pct_change": 65.1,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 3.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 3.0
         },
@@ -73568,6 +73564,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 4.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 4.0
         }
       ]
     },
@@ -73583,10 +73583,6 @@
       "trend_status": "trending",
       "pct_change": 331.9,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -77246,6 +77242,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 4.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 4.0
         }
       ]
     },
@@ -77261,10 +77261,6 @@
       "trend_status": "normal",
       "pct_change": -52.4,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 10.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 10.0
@@ -80924,6 +80920,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 3.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 3.0
         }
       ]
     },
@@ -80939,10 +80939,6 @@
       "trend_status": "normal",
       "pct_change": -17.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -84602,6 +84598,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 3.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 3.0
         }
       ]
     },
@@ -84617,10 +84617,6 @@
       "trend_status": "elevated",
       "pct_change": 200.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -88279,6 +88275,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 3.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 3.0
         }
       ]
@@ -88296,10 +88296,6 @@
       "pct_change": 50.9,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 2.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 3.0
         },
@@ -91958,6 +91954,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 3.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 3.0
         }
       ]
     },
@@ -91973,10 +91973,6 @@
       "trend_status": "low",
       "pct_change": -81.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 16.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 21.0
@@ -95636,6 +95632,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -95651,10 +95651,6 @@
       "trend_status": "normal",
       "pct_change": -72.1,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 4.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 4.0
@@ -99314,6 +99310,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -99329,10 +99329,6 @@
       "trend_status": "normal",
       "pct_change": -41.1,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 4.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 6.0
@@ -102992,6 +102988,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -103007,10 +103007,6 @@
       "trend_status": "normal",
       "pct_change": -25.3,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -106670,6 +106666,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -106685,10 +106685,6 @@
       "trend_status": "normal",
       "pct_change": 43.5,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
@@ -110348,6 +110344,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -110363,10 +110363,6 @@
       "trend_status": "normal",
       "pct_change": -21.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -114026,6 +114022,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -114041,10 +114041,6 @@
       "trend_status": "normal",
       "pct_change": -38.8,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -117704,6 +117700,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 2.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 2.0
         }
       ]
     },
@@ -117719,10 +117719,6 @@
       "trend_status": "normal",
       "pct_change": -28.4,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 11.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 13.0
@@ -121382,6 +121378,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -121397,10 +121397,6 @@
       "trend_status": "normal",
       "pct_change": 32.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -125059,6 +125055,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -125076,10 +125076,6 @@
       "pct_change": 9.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -128737,6 +128733,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -128754,10 +128754,6 @@
       "pct_change": 2716.7,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -132416,6 +132412,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -132431,10 +132431,6 @@
       "trend_status": "normal",
       "pct_change": 46.3,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
@@ -136094,6 +136090,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -136109,10 +136109,6 @@
       "trend_status": "normal",
       "pct_change": 21.6,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -139771,6 +139767,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -139788,10 +139788,6 @@
       "pct_change": 218.9,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -143450,6 +143446,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -143465,10 +143465,6 @@
       "trend_status": "normal",
       "pct_change": -48.3,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -147128,6 +147124,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -147143,10 +147143,6 @@
       "trend_status": "normal",
       "pct_change": 204.5,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -150805,6 +150801,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -150822,10 +150822,6 @@
       "pct_change": 47.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -154483,6 +154479,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -154500,10 +154500,6 @@
       "pct_change": 193.9,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -158161,6 +158157,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -158178,10 +158178,6 @@
       "pct_change": 228.2,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -161839,6 +161835,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -161856,10 +161856,6 @@
       "pct_change": 5.3,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -165517,6 +165513,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -165534,10 +165534,6 @@
       "pct_change": 327.8,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -169195,6 +169191,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -169212,10 +169212,6 @@
       "pct_change": 228.2,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -172873,6 +172869,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -172890,10 +172890,6 @@
       "pct_change": 184.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -176551,6 +176547,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -176568,10 +176568,6 @@
       "pct_change": -21.9,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 4.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 4.0
         },
@@ -180229,6 +180225,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -180246,10 +180246,6 @@
       "pct_change": -4.8,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -183907,6 +183903,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -183924,10 +183924,6 @@
       "pct_change": 472.9,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -187585,6 +187581,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 1.0
         }
       ]
@@ -187602,10 +187602,6 @@
       "pct_change": 267.4,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -191264,6 +191260,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -191279,10 +191279,6 @@
       "trend_status": "normal",
       "pct_change": 24.3,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -194942,6 +194938,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -194957,10 +194957,6 @@
       "trend_status": "normal",
       "pct_change": 29.5,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -198620,6 +198616,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 1.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 1.0
         }
       ]
     },
@@ -198635,10 +198635,6 @@
       "trend_status": "low",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -202298,6 +202294,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -202313,10 +202313,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -205976,6 +205972,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -205991,10 +205991,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -209654,6 +209650,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -209669,10 +209669,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 3.0
@@ -213332,6 +213328,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -213347,10 +213347,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 3.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
@@ -217010,6 +217006,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -217025,10 +217025,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 8.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 10.0
@@ -220688,6 +220684,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -220703,10 +220703,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -224366,6 +224362,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -224381,10 +224381,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -228043,6 +228039,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -228060,10 +228060,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -231722,6 +231718,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -231737,10 +231737,6 @@
       "trend_status": "low",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -235400,6 +235396,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -235415,10 +235415,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -239078,6 +239074,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -239093,10 +239093,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -242756,6 +242752,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -242771,10 +242771,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -246434,6 +246430,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -246449,10 +246449,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -250112,6 +250108,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -250127,10 +250127,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -253790,6 +253786,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -253805,10 +253805,6 @@
       "trend_status": "low",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 3.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 4.0
@@ -257468,6 +257464,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -257483,10 +257483,6 @@
       "trend_status": "low",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 3.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 3.0
@@ -261146,6 +261142,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -261161,10 +261161,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -264823,6 +264819,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -264840,10 +264840,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -268501,6 +268497,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -268518,10 +268518,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
         },
@@ -272179,6 +272175,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -272196,10 +272196,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -275857,6 +275853,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -275874,10 +275874,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -279535,6 +279531,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -279552,10 +279552,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -283213,6 +283209,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -283230,10 +283230,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -286891,6 +286887,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -286908,10 +286908,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 5.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 5.0
         },
@@ -290569,6 +290565,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -290586,10 +290586,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -294247,6 +294243,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -294264,10 +294264,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -297925,6 +297921,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -297942,10 +297942,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -301603,6 +301599,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -301620,10 +301620,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -305281,6 +305277,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -305298,10 +305298,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -308959,6 +308955,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -308976,10 +308976,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -312637,6 +312633,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -312654,10 +312654,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -316315,6 +316311,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -316332,10 +316332,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 2.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
         },
@@ -319993,6 +319989,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -320010,10 +320010,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -323671,6 +323667,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -323688,10 +323688,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -327349,6 +327345,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -327366,10 +327366,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -331027,6 +331023,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -331044,10 +331044,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -334705,6 +334701,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -334722,10 +334722,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -338383,6 +338379,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -338400,10 +338400,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -342061,6 +342057,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -342078,10 +342078,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -345739,6 +345735,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -345756,10 +345756,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -349417,6 +349413,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -349434,10 +349434,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -353095,6 +353091,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -353112,10 +353112,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -356773,6 +356769,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -356790,10 +356790,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -360451,6 +360447,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -360468,10 +360468,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -364129,6 +364125,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -364146,10 +364146,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 2.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 2.0
         },
@@ -367807,6 +367803,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -367824,10 +367824,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -371486,6 +371482,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -371501,10 +371501,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -375164,6 +375160,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -375179,10 +375179,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -378842,6 +378838,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -378857,10 +378857,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -382520,6 +382516,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -382535,10 +382535,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -386197,6 +386193,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -386214,10 +386214,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -389876,6 +389872,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -389891,10 +389891,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -393554,6 +393550,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -393569,10 +393569,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -397231,6 +397227,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -397248,10 +397248,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -400910,6 +400906,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -400925,10 +400925,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -404588,6 +404584,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -404603,10 +404603,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -408265,6 +408261,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -408282,10 +408282,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -411943,6 +411939,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -411960,10 +411960,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -415621,6 +415617,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -415638,10 +415638,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -419299,6 +419295,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -419316,10 +419316,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -422977,6 +422973,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -422994,10 +422994,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -426655,6 +426651,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -426672,10 +426672,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -430334,6 +430330,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -430349,10 +430349,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
@@ -434012,6 +434008,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -434027,10 +434027,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -437690,6 +437686,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -437705,10 +437705,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -441367,6 +441363,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -441384,10 +441384,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -445045,6 +445041,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -445062,10 +445062,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -448723,6 +448719,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -448740,10 +448740,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -452401,6 +452397,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -452418,10 +452418,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -456080,6 +456076,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -456095,10 +456095,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 11.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 9.0
@@ -459758,6 +459754,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -459773,10 +459773,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -463435,6 +463431,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -463452,10 +463452,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -467113,6 +467109,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -467130,10 +467130,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -470791,6 +470787,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -470808,10 +470808,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -474469,6 +474465,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -474486,10 +474486,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -478147,6 +478143,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -478164,10 +478164,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -481825,6 +481821,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -481842,10 +481842,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -485503,6 +485499,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -485520,10 +485520,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -489181,6 +489177,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -489198,10 +489198,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -492859,6 +492855,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -492876,10 +492876,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -496537,6 +496533,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -496554,10 +496554,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -500215,6 +500211,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -500232,10 +500232,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -503893,6 +503889,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -503910,10 +503910,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -507571,6 +507567,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -507588,10 +507588,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -511249,6 +511245,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -511266,10 +511266,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -514927,6 +514923,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -514944,10 +514944,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -518605,6 +518601,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -518622,10 +518622,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -522283,6 +522279,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -522300,10 +522300,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -525961,6 +525957,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -525978,10 +525978,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -529639,6 +529635,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -529656,10 +529656,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -533317,6 +533313,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -533334,10 +533334,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -536995,6 +536991,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -537012,10 +537012,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -540673,6 +540669,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -540690,10 +540690,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -544351,6 +544347,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -544368,10 +544368,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -548029,6 +548025,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -548046,10 +548046,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -551707,6 +551703,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -551724,10 +551724,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -555385,6 +555381,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -555402,10 +555402,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -559064,6 +559060,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -559079,10 +559079,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -562742,6 +562738,10 @@
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
           "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
+          "mentions": 0.0
         }
       ]
     },
@@ -562757,10 +562757,6 @@
       "trend_status": "normal",
       "pct_change": -100.0,
       "history": [
-        {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
         {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
@@ -566419,6 +566415,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -566436,10 +566436,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 1.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 1.0
         },
@@ -570097,6 +570093,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -570114,10 +570114,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -573775,6 +573771,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -573792,10 +573792,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -577453,6 +577449,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -577470,10 +577470,6 @@
       "pct_change": null,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -581131,6 +581127,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -581148,10 +581148,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -584809,6 +584805,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
@@ -584826,10 +584826,6 @@
       "pct_change": -100.0,
       "history": [
         {
-          "window_end": "2026-05-18T03:43:27.969144Z",
-          "mentions": 0.0
-        },
-        {
           "window_end": "2026-05-18T08:01:10.383359Z",
           "mentions": 0.0
         },
@@ -588487,6 +588483,10 @@
         },
         {
           "window_end": "2026-08-16T02:57:30.824185Z",
+          "mentions": 0.0
+        },
+        {
+          "window_end": "2026-08-16T03:50:25.502545Z",
           "mentions": 0.0
         }
       ]
